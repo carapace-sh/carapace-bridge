@@ -114,8 +114,7 @@ func invokeXonsh(cmdline string) {
 
 `, cmdline, cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
-    out, _, _ :=e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
-    println(out)
+    e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	println(string(content))
