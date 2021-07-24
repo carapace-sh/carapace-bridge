@@ -76,7 +76,7 @@ func invokeElvish(cmdline string) {
 
 	e.Send(fmt.Sprintf("$edit:completion:arg-completer[%v] %v'' | to-json > %v\n", strings.SplitN(cmdline, " ", 2)[0], cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
-    e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
+	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	println(string(content))
@@ -104,15 +104,15 @@ func invokeXonsh(cmdline string) {
 	defer os.Remove(file.Name())
 
 	e.Send(fmt.Sprintf(`for (k,v) in builtins.__xonsh__.completers.items():
-    e = v('', '%v', 0, len('%v'), '')
-    if e is not None:
-        with open('%v', 'a') as f:
-            print(e, file=f) 
-    
+	   e = v('', '%v', 0, len('%v'), '')
+	   if e is not None and len(e)!=0:
+	       with open('%v', 'a') as f:
+	           print(e, file=f)
+               break
+
 `, cmdline, cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
-    out, _,_ :=e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
-    println(out)
+	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	println(string(content))
