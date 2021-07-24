@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -53,12 +54,27 @@ func init() {
 	})
 }
 
+type rawValue struct {
+	Value       string `json:"value"`
+	Display     string `json:"display"`
+	Description string `json:"description"`
+}
+
 func invokeBash(cmdline string) {
 	output, err := exec.Command("scripts/invoke_bash", cmdline).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(output))
+	lines := strings.Split(string(output), "\n")
+	vals := make([]*rawValue, 0)
+	for _, line := range lines[:len(lines)-1] {
+		vals = append(vals, &rawValue{Value: line})
+	}
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
 }
 
 func invokeElvish(cmdline string) {
@@ -87,7 +103,22 @@ func invokeFish(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(output))
+
+	lines := strings.Split(string(output), "\n")
+	vals := make([]*rawValue, 0)
+	for _, line := range lines[:len(lines)-1] {
+		splitted := strings.SplitN(line, "\t", 2)
+		if len(splitted) > 1 {
+			vals = append(vals, &rawValue{Value: splitted[0], Description: splitted[1]})
+		} else {
+			vals = append(vals, &rawValue{Value: splitted[0]})
+		}
+	}
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
 }
 
 func invokeXonsh(cmdline string) {
@@ -114,10 +145,17 @@ func invokeXonsh(cmdline string) {
 
 `, cmdline, cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
-    e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
+	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	fmt.Println(string(content))
+}
+
+type completionResult struct {
+	CompletionText string
+	ListItemText   string
+	ResultType     int
+	ToolTip        string
 }
 
 func invokePowershell(cmdline string) {
@@ -125,5 +163,28 @@ func invokePowershell(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(output))
+
+	if !strings.HasPrefix(string(output), "[") {
+		output = []byte("[" + string(output) + "]")
+	}
+
+	var completionResults []completionResult
+	if err := json.Unmarshal(output, &completionResults); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	vals := make([]*rawValue, 0)
+	for _, c := range completionResults {
+		vals = append(vals, &rawValue{
+			Value:       c.CompletionText,
+			Display:     c.ListItemText,
+			Description: c.ToolTip,
+		})
+	}
+
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
 }
