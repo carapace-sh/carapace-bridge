@@ -107,12 +107,15 @@ func invokeXonsh(cmdline string) {
 	   e = v('', '%v', 0, len('%v'), '')
 	   if e is not None and len(e)!=0:
 	       with open('%v', 'a') as f:
-	           print(e, file=f)
-               break
+                 import json
+                 m = list(map(lambda x: dict(value = str(x), display = x.display, description = x.description), e))
+                 print(json.dumps(m), file=f)
+                 break
 
 `, cmdline, cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
-	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
+    out, _, _ :=e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
+    println(out)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	println(string(content))
