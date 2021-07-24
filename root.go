@@ -58,7 +58,7 @@ func invokeBash(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(string(output))
+	fmt.Println(string(output))
 }
 
 func invokeElvish(cmdline string) {
@@ -79,7 +79,7 @@ func invokeElvish(cmdline string) {
 	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
-	println(string(content))
+	fmt.Println(string(content))
 }
 
 func invokeFish(cmdline string) {
@@ -87,7 +87,7 @@ func invokeFish(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(string(output))
+	fmt.Println(string(output))
 }
 
 func invokeXonsh(cmdline string) {
@@ -117,7 +117,7 @@ func invokeXonsh(cmdline string) {
     e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
-	println(string(content))
+	fmt.Println(string(content))
 }
 
 func invokePowershell(cmdline string) {
@@ -125,5 +125,5 @@ func invokePowershell(cmdline string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(string(output))
+	fmt.Println(string(output))
 }
