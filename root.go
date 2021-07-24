@@ -198,11 +198,11 @@ func invokeZsh(cmdline string) {
 	}
 	lines := strings.Split(string(output), "\n")
 	vals := make([]*rawValue, 0)
-	r := regexp.MustCompile(`^(?P<value>.*?)( --( (?P<display>.*?))? +-- (?P<description>.*))?$`)
+	r := regexp.MustCompile(`^(?P<value>.*?)( --( (?P<display>.*?))?( +-- (?P<description>.*)))?$`)
 	for _, line := range lines[:len(lines)-1] {
 		if r.MatchString(line) {
 			matches := r.FindStringSubmatch(line)
-			vals = append(vals, &rawValue{Value: matches[1], Display: matches[4], Description: matches[5]})
+			vals = append(vals, &rawValue{Value: matches[1], Display: matches[4], Description: matches[6]})
 		}
 	}
 	marshalled, err := json.Marshal(vals)
