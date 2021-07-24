@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -64,8 +65,10 @@ type rawValue struct {
 	Description string `json:"description"`
 }
 
+//go:embed scripts/invoke_bash
+var bashScript string
 func invokeBash(cmdline string) {
-	output, err := exec.Command("scripts/invoke_bash", cmdline).Output()
+	output, err := exec.Command("bash", "-i", "-c", bashScript, "--", cmdline).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -103,7 +106,7 @@ func invokeElvish(cmdline string) {
 }
 
 func invokeFish(cmdline string) {
-	output, err := exec.Command("scripts/invoke_fish", cmdline).Output()
+	output, err := exec.Command("fish", "-c", fmt.Sprintf(`complete --do-complete="%v"`, cmdline)).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -155,8 +158,10 @@ func invokeXonsh(cmdline string) {
 	fmt.Println(string(content))
 }
 
+//go:embed scripts/invoke_oil
+var oilScript string
 func invokeOil(cmdline string) {
-	output, err := exec.Command("scripts/invoke_oil", cmdline).Output()
+	output, err := exec.Command("osh", "-c", oilScript, "--", cmdline).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -210,8 +215,10 @@ func invokePowershell(cmdline string) {
 	fmt.Println(string(marshalled))
 }
 
+//go:embed scripts/invoke_zsh
+var zshScript string
 func invokeZsh(cmdline string) {
-	output, err := exec.Command("scripts/invoke_zsh", cmdline).Output()
+	output, err := exec.Command("zsh", "-c", zshScript, "--", cmdline).Output()
 	if err != nil {
 		log.Fatal(err)
 	}

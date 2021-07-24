@@ -1,6 +1,6 @@
 module github.com/rsteube/invoke-completion
 
-go 1.14
+go 1.16
 
 require (
 	github.com/google/goexpect v0.0.0-20210430020637-ab937bf7fd6f
