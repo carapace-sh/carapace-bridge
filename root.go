@@ -104,6 +104,8 @@ func invokeElvish(cmdline string) {
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	fmt.Println(string(content))
+
+    // TODO parse and convert
 }
 
 func invokeFish(cmdline string) {
