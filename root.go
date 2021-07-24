@@ -67,6 +67,7 @@ type rawValue struct {
 
 //go:embed scripts/invoke_bash
 var bashScript string
+
 func invokeBash(cmdline string) {
 	output, err := exec.Command("bash", "-i", "-c", bashScript, "--", cmdline).Output()
 	if err != nil {
@@ -106,7 +107,7 @@ func invokeElvish(cmdline string) {
 }
 
 func invokeFish(cmdline string) {
-	output, err := exec.Command("fish", "-c", fmt.Sprintf(`complete --do-complete="%v"`, cmdline)).Output()
+	output, err := exec.Command("fish", "-c", `complete --do-complete="$argv"`, "--", cmdline).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -160,6 +161,7 @@ func invokeXonsh(cmdline string) {
 
 //go:embed scripts/invoke_oil
 var oilScript string
+
 func invokeOil(cmdline string) {
 	output, err := exec.Command("osh", "-c", oilScript, "--", cmdline).Output()
 	if err != nil {
@@ -217,6 +219,7 @@ func invokePowershell(cmdline string) {
 
 //go:embed scripts/invoke_zsh
 var zshScript string
+
 func invokeZsh(cmdline string) {
 	output, err := exec.Command("zsh", "-c", zshScript, "--", cmdline).Output()
 	if err != nil {
