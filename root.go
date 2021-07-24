@@ -28,6 +28,8 @@ var rootCmd = &cobra.Command{
 			invokeElvish(args[0])
 		case "fish":
 			invokeFish(args[0])
+		case "oil":
+			invokeOil(args[0])
 		case "powershell":
 			invokePowershell(args[0])
 		case "xonsh":
@@ -52,7 +54,7 @@ func init() {
 
 	carapace.Gen(rootCmd).FlagCompletion(carapace.ActionMap{
 		"format": carapace.ActionValues("json", "tab", "value", "display"),
-		"shell":  carapace.ActionValues("bash", "elvish", "fish", "powershell"),
+		"shell":  carapace.ActionValues("bash", "elvish", "fish", "powershell", "zsh"),
 	})
 }
 
@@ -151,6 +153,23 @@ func invokeXonsh(cmdline string) {
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
 	fmt.Println(string(content))
+}
+
+func invokeOil(cmdline string) {
+	output, err := exec.Command("scripts/invoke_oil", cmdline).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	lines := strings.Split(string(output), "\n")
+	vals := make([]*rawValue, 0)
+	for _, line := range lines[:len(lines)-1] {
+		vals = append(vals, &rawValue{Value: line})
+	}
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
 }
 
 type completionResult struct {
