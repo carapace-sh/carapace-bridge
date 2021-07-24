@@ -29,6 +29,8 @@ var rootCmd = &cobra.Command{
 			invokeFish(args[0])
 		case "powershell":
 			invokePowershell(args[0])
+		case "xonsh":
+			invokeXonsh(args[0])
 		default:
 
 		}
@@ -66,19 +68,18 @@ func invokeElvish(cmdline string) {
 	}
 	defer e.Close()
 
-
-    file, err := ioutil.TempFile(os.TempDir(), "invoke-completion_elvish")
+	file, err := ioutil.TempFile(os.TempDir(), "invoke-completion_elvish")
 	if err != nil {
 		log.Fatal(err)
 	}
-    defer os.Remove(file.Name())
+	defer os.Remove(file.Name())
 
 	e.Send(fmt.Sprintf("$edit:completion:arg-completer[%v] %v'' | to-json > %v\n", strings.SplitN(cmdline, " ", 2)[0], cmdline, file.Name()))
-    e.Send("echo EXPECT_END\n")
+	e.Send("echo EXPECT_END\n")
     e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
-    e.Send("exit\n")
-    content, err := ioutil.ReadFile(file.Name())
-    println(string(content))
+	e.Send("exit\n")
+	content, err := ioutil.ReadFile(file.Name())
+	println(string(content))
 }
 
 func invokeFish(cmdline string) {
@@ -87,6 +88,34 @@ func invokeFish(cmdline string) {
 		log.Fatal(err)
 	}
 	println(string(output))
+}
+
+func invokeXonsh(cmdline string) {
+	e, _, err := expect.SpawnWithArgs([]string{"xonsh", "-i", "--shell-type", "dumb"}, -1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer e.Close()
+
+	file, err := ioutil.TempFile(os.TempDir(), "invoke-completion_xonsh")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.Remove(file.Name())
+
+	e.Send(fmt.Sprintf(`for (k,v) in builtins.__xonsh__.completers.items():
+    e = v('', '%v', 0, len('%v'), '')
+    if e is not None:
+        with open('%v', 'a') as f:
+            print(e, file=f) 
+    
+`, cmdline, cmdline, file.Name()))
+	e.Send("echo EXPECT_END\n")
+    out, _,_ :=e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
+    println(out)
+	e.Send("exit\n")
+	content, err := ioutil.ReadFile(file.Name())
+	println(string(content))
 }
 
 func invokePowershell(cmdline string) {
