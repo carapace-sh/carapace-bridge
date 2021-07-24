@@ -54,7 +54,7 @@ func init() {
 
 	carapace.Gen(rootCmd).FlagCompletion(carapace.ActionMap{
 		"format": carapace.ActionValues("json", "tab", "value", "display"),
-		"shell":  carapace.ActionValues("bash", "elvish", "fish", "powershell", "zsh"),
+		"shell":  carapace.ActionValues("bash", "elvish", "fish", "oil", "powershell", "xonsh", "zsh"),
 	})
 }
 
