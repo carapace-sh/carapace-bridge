@@ -1,2 +1,0 @@
-#!/usr/bin/pwsh
-[System.Management.Automation.CommandCompletion]::CompleteInput("$($args[0])", $args[0].length, $null).CompletionMatches | ConvertTo-Json

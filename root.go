@@ -109,7 +109,7 @@ func invokeElvish(cmdline string) {
 	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
-    
+
 	var candidates []complexCandidate
 	if err := json.Unmarshal(content, &candidates); err != nil {
 		log.Fatal(err.Error())
@@ -207,7 +207,7 @@ type completionResult struct {
 }
 
 func invokePowershell(cmdline string) {
-	output, err := exec.Command("scripts/invoke_powershell", cmdline).Output()
+	output, err := exec.Command("pwsh", "-Command", fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json`, cmdline, len(cmdline))).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
