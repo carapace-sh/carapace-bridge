@@ -32,6 +32,8 @@ var rootCmd = &cobra.Command{
 			invokePowershell(args[0])
 		case "xonsh":
 			invokeXonsh(args[0])
+		case "zsh":
+			invokeZsh(args[0])
 		default:
 
 		}
@@ -182,6 +184,27 @@ func invokePowershell(cmdline string) {
 		})
 	}
 
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
+}
+
+func invokeZsh(cmdline string) {
+	output, err := exec.Command("scripts/invoke_zsh", cmdline).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	lines := strings.Split(string(output), "\n")
+	vals := make([]*rawValue, 0)
+	r := regexp.MustCompile(`^(?P<value>.*?)( --( (?P<display>.*?))? +-- (?P<description>.*))?$`)
+	for _, line := range lines[:len(lines)-1] {
+		if r.MatchString(line) {
+			matches := r.FindStringSubmatch(line)
+			vals = append(vals, &rawValue{Value: matches[1], Display: matches[4], Description: matches[5]})
+		}
+	}
 	marshalled, err := json.Marshal(vals)
 	if err != nil {
 		log.Fatal(err)
