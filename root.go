@@ -85,6 +85,12 @@ func invokeBash(cmdline string) {
 	fmt.Println(string(marshalled))
 }
 
+type complexCandidate struct {
+	Stem       string
+	CodeSuffix string
+	Display    string
+}
+
 func invokeElvish(cmdline string) {
 	e, _, err := expect.Spawn("elvish", -1)
 	if err != nil {
@@ -98,14 +104,26 @@ func invokeElvish(cmdline string) {
 	}
 	defer os.Remove(file.Name())
 
-	e.Send(fmt.Sprintf("$edit:completion:arg-completer[%v] %v'' | to-json > %v\n", strings.SplitN(cmdline, " ", 2)[0], cmdline, file.Name()))
+	e.Send(fmt.Sprintf("$edit:completion:arg-completer[%v] %v'' | put [(all)] | to-json > %v\n", strings.SplitN(cmdline, " ", 2)[0], cmdline, file.Name()))
 	e.Send("echo EXPECT_END\n")
 	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
-	fmt.Println(string(content))
+    
+	var candidates []complexCandidate
+	if err := json.Unmarshal(content, &candidates); err != nil {
+		log.Fatal(err.Error())
+	}
 
-    // TODO parse and convert
+	vals := make([]*rawValue, 0)
+	for _, candidate := range candidates {
+		vals = append(vals, &rawValue{Value: candidate.Stem + candidate.CodeSuffix, Display: candidate.Display})
+	}
+	marshalled, err := json.Marshal(vals)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(marshalled))
 }
 
 func invokeFish(cmdline string) {
