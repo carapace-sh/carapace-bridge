@@ -22,23 +22,43 @@ var rootCmd = &cobra.Command{
 	Short: "",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		var f func(string) ([]*rawValue, error)
 		switch cmd.Flag("shell").Value.String() {
 		case "bash":
-			invokeBash(args[0])
+			f = InvokeBash
 		case "elvish":
-			invokeElvish(args[0])
+			f = InvokeElvish
 		case "fish":
-			invokeFish(args[0])
+			f = InvokeFish
 		case "oil":
-			invokeOil(args[0])
+			f = InvokeOil
 		case "powershell":
-			invokePowershell(args[0])
+			f = InvokePowershell
 		case "xonsh":
-			invokeXonsh(args[0])
+			f = InvokeXonsh
 		case "zsh":
-			invokeZsh(args[0])
+			f = InvokeZsh
 		default:
+			log.Fatal("TODO: determine shell") // TODO determine shell
+		}
 
+		if vals, err := f(args[0]); err != nil {
+			log.Fatal(err.Error())
+		} else {
+			switch cmd.Flag("format").Value.String() {
+			case "json":
+				m, err := json.Marshal(vals)
+				if err != nil {
+					log.Fatal(err.Error())
+				}
+				fmt.Println(string(m))
+			case "value":
+				for _, v := range vals {
+					fmt.Println(v.Value)
+				}
+			default:
+				log.Fatal("unknown format")
+			}
 		}
 	},
 	CompletionOptions: cobra.CompletionOptions{
@@ -50,11 +70,11 @@ func main() {
 	rootCmd.Execute()
 }
 func init() {
-	rootCmd.Flags().StringP("format", "f", "json", "shell to use")
+	rootCmd.Flags().StringP("format", "f", "json", "output format")
 	rootCmd.Flags().StringP("shell", "s", "", "shell to use")
 
 	carapace.Gen(rootCmd).FlagCompletion(carapace.ActionMap{
-		"format": carapace.ActionValues("json", "tab", "value", "display"),
+		"format": carapace.ActionValues("json", "value"),
 		"shell":  carapace.ActionValues("bash", "elvish", "fish", "oil", "powershell", "xonsh", "zsh"),
 	})
 }
@@ -68,21 +88,17 @@ type rawValue struct {
 //go:embed scripts/invoke_bash
 var bashScript string
 
-func invokeBash(cmdline string) {
+func InvokeBash(cmdline string) ([]*rawValue, error) {
 	output, err := exec.Command("bash", "-i", "-c", bashScript, "--", cmdline).Output()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	lines := strings.Split(string(output), "\n")
 	vals := make([]*rawValue, 0)
 	for _, line := range lines[:len(lines)-1] {
 		vals = append(vals, &rawValue{Value: line})
 	}
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
 
 type complexCandidate struct {
@@ -91,16 +107,16 @@ type complexCandidate struct {
 	Display    string
 }
 
-func invokeElvish(cmdline string) {
+func InvokeElvish(cmdline string) ([]*rawValue, error) {
 	e, _, err := expect.Spawn("elvish", -1)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer e.Close()
 
 	file, err := ioutil.TempFile(os.TempDir(), "invoke-completion_elvish")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer os.Remove(file.Name())
 
@@ -109,27 +125,26 @@ func invokeElvish(cmdline string) {
 	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
+	if err != nil {
+		return nil, err
+	}
 
 	var candidates []complexCandidate
 	if err := json.Unmarshal(content, &candidates); err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	vals := make([]*rawValue, 0)
 	for _, candidate := range candidates {
 		vals = append(vals, &rawValue{Value: candidate.Stem + candidate.CodeSuffix, Display: candidate.Display})
 	}
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
 
-func invokeFish(cmdline string) {
+func InvokeFish(cmdline string) ([]*rawValue, error) {
 	output, err := exec.Command("fish", "-c", `complete --do-complete="$argv"`, "--", cmdline).Output()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	lines := strings.Split(string(output), "\n")
@@ -142,27 +157,25 @@ func invokeFish(cmdline string) {
 			vals = append(vals, &rawValue{Value: splitted[0]})
 		}
 	}
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
 
-func invokeXonsh(cmdline string) {
+// TODO return value
+func InvokeXonsh(cmdline string) ([]*rawValue, error) {
 	e, _, err := expect.SpawnWithArgs([]string{"xonsh", "-i", "--shell-type", "dumb"}, -1)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer e.Close()
 
 	file, err := ioutil.TempFile(os.TempDir(), "invoke-completion_xonsh")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer os.Remove(file.Name())
 
-	e.Send(fmt.Sprintf(`for (k,v) in builtins.__xonsh__.completers.items():
+	e.Send(fmt.Sprintf(`import builtins
+for (k,v) in builtins.__xonsh__.completers.items():
 	   e = v('', '%v', 0, len('%v'), '')
 	   if e is not None and len(e)!=0:
 	       with open('%v', 'a') as f:
@@ -176,27 +189,37 @@ func invokeXonsh(cmdline string) {
 	e.Expect(regexp.MustCompile("EXPECT_END"), 10*time.Second)
 	e.Send("exit\n")
 	content, err := ioutil.ReadFile(file.Name())
-	fmt.Println(string(content))
+	if err != nil {
+		return nil, err
+	}
+
+	var vals []rawValue
+	if err := json.Unmarshal(content, &vals); err != nil {
+		return nil, err
+	}
+
+	// TODO yuck
+	result := make([]*rawValue, 0)
+	for _, x := range vals {
+		result = append(result, &x)
+	}
+	return result, nil
 }
 
 //go:embed scripts/invoke_oil
 var oilScript string
 
-func invokeOil(cmdline string) {
+func InvokeOil(cmdline string) ([]*rawValue, error) {
 	output, err := exec.Command("osh", "-c", oilScript, "--", cmdline).Output()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	lines := strings.Split(string(output), "\n")
 	vals := make([]*rawValue, 0)
 	for _, line := range lines[:len(lines)-1] {
 		vals = append(vals, &rawValue{Value: line})
 	}
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
 
 type completionResult struct {
@@ -206,10 +229,10 @@ type completionResult struct {
 	ToolTip        string
 }
 
-func invokePowershell(cmdline string) {
+func InvokePowershell(cmdline string) ([]*rawValue, error) {
 	output, err := exec.Command("pwsh", "-Command", fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json`, cmdline, len(cmdline))).Output()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	if !strings.HasPrefix(string(output), "[") {
@@ -218,7 +241,7 @@ func invokePowershell(cmdline string) {
 
 	var completionResults []completionResult
 	if err := json.Unmarshal(output, &completionResults); err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 
 	vals := make([]*rawValue, 0)
@@ -229,21 +252,16 @@ func invokePowershell(cmdline string) {
 			Description: c.ToolTip,
 		})
 	}
-
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
 
 //go:embed scripts/invoke_zsh
 var zshScript string
 
-func invokeZsh(cmdline string) {
+func InvokeZsh(cmdline string) ([]*rawValue, error) {
 	output, err := exec.Command("zsh", "-c", zshScript, "--", cmdline).Output()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	lines := strings.Split(string(output), "\r\n")
 	vals := make([]*rawValue, 0)
@@ -258,9 +276,5 @@ func invokeZsh(cmdline string) {
 			vals = append(vals, &rawValue{Value: matches[1], Display: matches[4], Description: matches[6]})
 		}
 	}
-	marshalled, err := json.Marshal(vals)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(marshalled))
+	return vals, nil
 }
