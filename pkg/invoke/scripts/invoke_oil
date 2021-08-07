@@ -1,0 +1,11 @@
+#!/bin/osh
+source <(cat ~/.config/oil/oshrc) # TODO interactive flag in script header?
+COMP_LINE="$1"
+COMP_POINT=${#1}
+COMP_WORDS=($COMP_LINE'')
+COMP_CWORD=$((${#COMP_WORDS[@]}-1))
+
+f=$(complete | grep "^${COMP_WORDS[0]} " | grep --only-matching 'ShellFuncAction [^>]\+' | awk '{print $2}')
+
+$f ${COMP_WORDS[0]}
+( IFS=$'\n'; echo "${COMPREPLY[*]}" )
