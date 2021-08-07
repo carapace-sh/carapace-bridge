@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  build: &base
+    image: rsteube/carapace:0.6.3
+    command: sh -c 'sh -c "go build -ldflags=\"-s -w\" ."'
+    working_dir: /invoke-completion
+    environment:
+      TARGET: /invoke-completion/invoke-completion
+    volumes:
+      - '.:/invoke-completion/'
+      - 'go:/home/circleci/go/'
+  
+  elvish:
+    <<: *base
+    command: elvish 
+
+  test:
+    <<: *base
+    command: go test -v ./...
+
+volumes:
+  go:
