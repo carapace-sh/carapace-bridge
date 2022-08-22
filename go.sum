@@ -60,8 +60,8 @@ github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANyt
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
-github.com/rsteube/carapace v0.21.1 h1:ulbhwIrZOr4g6LziYtjO2S10LZOO2dbFLkUumtF3AAg=
-github.com/rsteube/carapace v0.21.1/go.mod h1:JjsAq3W3rvWEIg0FkOxT0HUNQjnboP/T0S8Khof9ZWU=
+github.com/rsteube/carapace v0.22.0 h1:lXYBadIedOIoy/lWfKl9TCxZBVKQ/ClTOKUD6DC2DuY=
+github.com/rsteube/carapace v0.22.0/go.mod h1:JjsAq3W3rvWEIg0FkOxT0HUNQjnboP/T0S8Khof9ZWU=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
 github.com/spf13/cobra v1.5.0 h1:X+jTBEBqF0bHN+9cSMgmfuvv2VHJ9ezmFNf9Y/XstYU=
