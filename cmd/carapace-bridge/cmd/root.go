@@ -36,7 +36,7 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 		Short: short,
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			rootCmd.SetArgs(append([]string{"_carapace", "export", "", "fish"}, args...))
+			rootCmd.SetArgs(append([]string{"_carapace", "export", "", use}, args...))
 			rootCmd.Execute()
 		},
 		DisableFlagParsing: true,
