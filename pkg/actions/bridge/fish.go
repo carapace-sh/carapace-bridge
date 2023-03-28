@@ -9,6 +9,13 @@ import (
 	"github.com/rsteube/carapace/pkg/xdg"
 )
 
+func compline(args ...string) string {
+	for index, arg := range args {
+		args[index] = fmt.Sprintf("%#v", arg)
+	}
+	return fmt.Sprintf("%#v", strings.Join(args, " "))
+}
+
 // ActionFish bridges completions registered in fish shell
 // (uses custom `config.fish` in “~/.config/carapace/bridge/fish`)
 func ActionFish(command ...string) carapace.Action {
@@ -22,15 +29,12 @@ func ActionFish(command ...string) carapace.Action {
 			return carapace.ActionMessage(err.Error())
 		}
 
-		args := append(command[1:], c.Args...)
+		args := append(command, c.Args...)
 		args = append(args, c.CallbackValue)
-		for index, arg := range args {
-			args[index] = fmt.Sprintf("%#v", arg)
-		}
+		snippet := fmt.Sprintf(`complete --do-complete=%v`, compline(args...))
 
 		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir)) // use custom config.fish for bridge
-		command := fmt.Sprintf(`complete --do-complete=%v\ %#v`, command[0], strings.Join(args, " "))
-		return carapace.ActionExecCommand("fish", "--command", command)(func(output []byte) carapace.Action {
+		return carapace.ActionExecCommand("fish", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			nospace := false
 
@@ -59,5 +63,5 @@ func ActionFish(command ...string) carapace.Action {
 			}
 			return a
 		}).Invoke(c).ToA()
-	}).Tag("fish bridge")
+	}).Tag("bash bridge")
 }
