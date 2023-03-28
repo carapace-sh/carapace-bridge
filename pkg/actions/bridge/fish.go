@@ -63,5 +63,5 @@ func ActionFish(command ...string) carapace.Action {
 			}
 			return a
 		}).Invoke(c).ToA()
-	}).Tag("bash bridge")
+	}).Tag("fish bridge")
 }
