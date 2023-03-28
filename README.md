@@ -1,6 +1,6 @@
 # carapace-bridge
 
-bridge shell completions
+bridge completions
 
 ## Status
 
