@@ -1,6 +1,6 @@
 # carapace-bridge
 
-bridge completions
+completion bridge
 
 [![asciicast](https://asciinema.org/a/571396.svg)](https://asciinema.org/a/571396)
 
