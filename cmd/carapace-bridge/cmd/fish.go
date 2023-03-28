@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/rsteube/carapace"
 	"github.com/rsteube/carapace-bridge/pkg/actions/bridge"
+	"github.com/rsteube/carapace-bridge/pkg/actions/os"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +24,7 @@ func init() {
 	rootCmd.AddCommand(fishCmd)
 
 	carapace.Gen(fishCmd).PositionalCompletion(
-		carapace.ActionValues(),
+		os.ActionPathExecutables(),
 	)
 
 	carapace.Gen(fishCmd).PositionalAnyCompletion(
