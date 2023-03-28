@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/rsteube/carapace"
+	"github.com/rsteube/carapace/pkg/style"
 	"github.com/rsteube/carapace/pkg/xdg"
 )
 
@@ -48,7 +49,12 @@ func ActionFish(command ...string) carapace.Action {
 				}
 
 			}
-			a := carapace.ActionValuesDescribed(vals...)
+			a := carapace.ActionValuesDescribed(vals...).StyleF(func(s string, sc style.Context) string {
+				if strings.HasPrefix(s, "--") && strings.Contains(s, "=") {
+					s = strings.SplitN(s, "=", 2)[1] // assume optarg
+				}
+				return style.ForPath(s, sc)
+			})
 			if nospace {
 				a = a.NoSpace()
 			}
