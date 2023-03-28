@@ -24,14 +24,13 @@ func ActionFish(command ...string) carapace.Action {
 
 		args := append(command[1:], c.Args...)
 		args = append(args, c.CallbackValue)
-		for _, arg := range args {
-			arg = strings.Replace(arg, `\`, `\\`, -1)
-			arg = strings.Replace(arg, `'`, `\'`, -1)
-			arg = strings.Replace(arg, ` `, `\ `, -1)
+		for index, arg := range args {
+			args[index] = fmt.Sprintf("%#v", arg)
 		}
 
 		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir)) // use custom config.fish for bridge
-		return carapace.ActionExecCommand("fish", "--command", fmt.Sprintf(`complete '--do-complete=%v %v'`, command[0], strings.Join(args, " ")))(func(output []byte) carapace.Action {
+		command := fmt.Sprintf(`complete --do-complete=%v\ %#v`, command[0], strings.Join(args, " "))
+		return carapace.ActionExecCommand("fish", "--command", command)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			nospace := false
 
