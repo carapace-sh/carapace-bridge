@@ -1,4 +1,4 @@
-module github.com/rsteube/invoke-completion
+module github.com/rsteube/carapace-bridge
 
 go 1.16
 
