@@ -5,7 +5,6 @@ import (
 
 	"github.com/rsteube/carapace"
 	"github.com/rsteube/carapace-bridge/pkg/actions/bridge"
-	"github.com/rsteube/carapace-bridge/pkg/actions/os"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/spf13/cobra"
 )
@@ -61,7 +60,7 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 		carapace.ActionMultiParts("/", func(c carapace.Context) carapace.Action {
 			switch len(c.Parts) {
 			case 0:
-				return os.ActionPathExecutables()
+				return carapace.ActionPathExecutables()
 			case 1:
 				return carapace.ActionStyledValues(
 					"bash", "#d35673",
