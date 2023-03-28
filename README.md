@@ -1,6 +1,6 @@
 # carapace-bridge
 
-invoke shell completion
+bridge shell completions
 
 ## Status
 
