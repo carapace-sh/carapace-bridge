@@ -23,7 +23,7 @@ PROMPT=
 
 # load completion system
 autoload compinit
-compinit -d ~/.zcompdump_capture
+compinit -d ${XDG_CONFIG_HOME:-~}/.zcompdump_capture
 source "${XDG_CONFIG_HOME:-~/.config}/zsh/.zshrc"
 
 # never run a command
