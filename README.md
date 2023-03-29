@@ -7,13 +7,13 @@ Invokes completion of various frameworks and provides bridge actions for [carapa
 Supported frameworks:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
 - [carapace](https://github.com/rsteube/carapace)
-- [carapace-bin](https://github.com/rsteube/carapace-bin/) (registered completions)
+- [carapace-bin](https://github.com/rsteube/carapace-bin/)
 - [click](https://github.com/pallets/click)
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
-- [fish](https://fishshell.com/) (registered completions)
+- [fish](https://fishshell.com/)
 - [yargs](https://github.com/yargs/yargs)
-- [zsh](https://www.zsh.org/) (registered completions)
+- [zsh](https://www.zsh.org/)
 
 Supported shells:
 - [Bash](https://www.gnu.org/software/bash/)
