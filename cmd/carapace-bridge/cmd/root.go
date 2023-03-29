@@ -11,7 +11,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "carapace-bridge",
-	Short: "bridge completions",
+	Short: "completion bridge",
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
@@ -32,6 +32,7 @@ func init() {
 	addSubCommand("complete", "bridges https://github.com/spf13/cobra", bridge.ActionComplete)
 	addSubCommand("fish", "bridges completions registered in fish shell", bridge.ActionFish)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
+	addSubCommand("zsh", "bridges completions registered in zsh shell", bridge.ActionZsh)
 }
 
 func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
