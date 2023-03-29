@@ -109,6 +109,10 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 	// TODO remove/prevent help flag
 	carapace.Gen(cmd).Standalone()
 
+	carapace.Gen(cmd).PreRun(func(cmd *cobra.Command, args []string) {
+		cmd.Use = strings.SplitN(cmd.Use, " ", 2)[0]
+	})
+
 	rootCmd.AddCommand(cmd)
 
 	carapace.Gen(cmd).PositionalCompletion(
