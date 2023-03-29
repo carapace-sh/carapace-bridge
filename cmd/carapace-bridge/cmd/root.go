@@ -23,13 +23,13 @@ func Execute(version string) error {
 }
 func init() {
 	carapace.Gen(rootCmd)
+	rootCmd.AddGroup(&cobra.Group{ID: "bridge", Title: "Bridge Commands"})
 	addSubCommand("argcomplete", "bridges https://github.com/kislyuk/argcomplete", bridge.ActionArgcomplete)
 	addSubCommand("carapace-bin", "bridges completions registered in carapace-bin", bridge.ActionCarapaceBin)
 	addSubCommand("carapace", "bridges https://github.com/rsteube/carapace", bridge.ActionCarapace)
 	addSubCommand("click", "bridges https://github.com/pallets/click", bridge.ActionClick)
-	addSubCommand("click", "bridges https://github.com/pallets/click", bridge.ActionClick)
 	addSubCommand("cobra", "bridges https://github.com/spf13/cobra", bridge.ActionCobra)
-	addSubCommand("complete", "bridges https://github.com/spf13/cobra", bridge.ActionComplete)
+	addSubCommand("complete", "bridges https://github.com/posener/complete", bridge.ActionComplete)
 	addSubCommand("fish", "bridges completions registered in fish shell", bridge.ActionFish)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
 	addSubCommand("zsh", "bridges completions registered in zsh shell", bridge.ActionZsh)
@@ -37,9 +37,10 @@ func init() {
 
 func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 	cmd := &cobra.Command{
-		Use:   use,
-		Short: short,
-		Args:  cobra.MinimumNArgs(1),
+		Use:     use,
+		Short:   short,
+		GroupID: "bridge",
+		Args:    cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			splitted := strings.Split(args[0], "/")
 			args[0] = splitted[0]
