@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"bytes"
+	"fmt"
 	"strings"
 
 	"github.com/rsteube/carapace"
 	"github.com/rsteube/carapace-bridge/pkg/actions/bridge"
+	"github.com/rsteube/carapace/pkg/ps"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/spf13/cobra"
 )
@@ -15,6 +18,17 @@ var rootCmd = &cobra.Command{
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
+	Example: `  carapace-bin completion:
+    bash:       source <(carapace-bridge _carapace bash)
+    elvish:     eval (carapace-bridge _carapace elvish | slurp)
+    fish:       carapace-bridge _carapace fish | source
+    nushell:    carapace-bridge _carapace nushell
+    oil:        source <(carapace-bridge _carapace oil)
+    powershell: carapace-bridge _carapace powershell | Out-String | Invoke-Expression
+    tcsh:       eval ` + "`" + `carapace-bridge _carapace tcsh` + "`" + `
+    xonsh:      exec($(carapace-bridge _carapace xonsh))
+    zsh:        source <(carapace-bridge _carapace zsh)
+`,
 }
 
 func Execute(version string) error {
@@ -37,10 +51,23 @@ func init() {
 
 func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 	cmd := &cobra.Command{
-		Use:     use,
+		Use:     use + " <command>[/<shell>]",
 		Short:   short,
 		GroupID: "bridge",
-		Args:    cobra.MinimumNArgs(1),
+		Example: fmt.Sprintf(`  bridge <command>:
+    bash:       source <(carapace-bridge %v command/bash)
+    elvish:     eval (carapace-bridge %v command/elvish | slurp)
+    fish:       carapace-bridge %v command/fish | source
+    nushell:    carapace-bridge %v command/nushell
+    oil:        source <(carapace-bridge %v command/oil)
+    powershell: carapace-bridge %v command/powershell | Out-String | Invoke-Expression
+    tcsh:       eval `+"`"+`carapace-bridge %v command/tcsh`+"`"+`
+    xonsh:      exec($(carapace-bridge %v command/xonsh))
+    zsh:        source <(carapace-bridge %v command/zsh)
+`,
+			use, use, use, use, use, use, use, use, use),
+		Args:               cobra.MinimumNArgs(1),
+		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			splitted := strings.Split(args[0], "/")
 			args[0] = splitted[0]
@@ -48,12 +75,38 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 			if len(splitted) > 1 {
 				shell = splitted[1]
 			}
-			rootCmd.SetArgs(append([]string{"_carapace", shell, "", use}, args...))
-			rootCmd.Execute()
+
+			switch len(args) {
+			case 1:
+				if shell == "export" {
+					shell = ps.DetermineShell()
+				}
+
+				cmd := &cobra.Command{Use: splitted[0]}
+				carapace.Gen(cmd)
+
+				stdout := bytes.Buffer{}
+				cmd.SetOut(&stdout)
+				cmd.SetArgs([]string{"_carapace", shell})
+				cmd.Execute()
+
+				output := stdout.String()
+				switch shell {
+				case "xonsh":
+					output = strings.Replace(output, fmt.Sprintf("'_carapace', '%v'", shell), fmt.Sprintf("'_carapace', '%v', '', '%v'", shell, use), -1) // xonsh callback
+				default:
+					output = strings.Replace(output, fmt.Sprintf("_carapace %v", shell), fmt.Sprintf("_carapace %v '' %v", shell, use), -1) // general callback
+				}
+
+				fmt.Fprint(rootCmd.OutOrStdout(), output)
+			default:
+				rootCmd.SetArgs(append([]string{"_carapace", shell, "", use}, args...))
+				rootCmd.Execute()
+			}
 		},
-		DisableFlagParsing: true,
 	}
 
+	// TODO remove/prevent help flag
 	carapace.Gen(cmd).Standalone()
 
 	rootCmd.AddCommand(cmd)
