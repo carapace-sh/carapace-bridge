@@ -33,7 +33,7 @@ func ActionFish(command ...string) carapace.Action {
 		args = append(args, c.CallbackValue)
 		snippet := fmt.Sprintf(`complete --do-complete=%v`, compline(args...))
 
-		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir)) // use custom config.fish for bridge
+		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
 		return carapace.ActionExecCommand("fish", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			nospace := false
@@ -63,5 +63,5 @@ func ActionFish(command ...string) carapace.Action {
 			}
 			return a
 		}).Invoke(c).ToA()
-	}).Tag("bash bridge")
+	})
 }
