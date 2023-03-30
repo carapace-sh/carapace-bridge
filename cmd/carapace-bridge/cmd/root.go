@@ -44,9 +44,10 @@ func init() {
 	addSubCommand("click", "bridges https://github.com/pallets/click", bridge.ActionClick)
 	addSubCommand("cobra", "bridges https://github.com/spf13/cobra", bridge.ActionCobra)
 	addSubCommand("complete", "bridges https://github.com/posener/complete", bridge.ActionComplete)
-	addSubCommand("fish", "bridges completions registered in fish shell", bridge.ActionFish)
+	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
+	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
-	addSubCommand("zsh", "bridges completions registered in zsh shell", bridge.ActionZsh)
+	addSubCommand("zsh", "bridges completions registered in zsh", bridge.ActionZsh)
 }
 
 func addSubCommand(use, short string, f func(s ...string) carapace.Action) {

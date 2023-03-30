@@ -12,6 +12,7 @@ Supported frameworks:
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
 - [fish](https://fishshell.com/)
+- [powershell](https://microsoft.com/powershell)
 - [yargs](https://github.com/yargs/yargs)
 - [zsh](https://www.zsh.org/)
 

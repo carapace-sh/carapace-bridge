@@ -16,7 +16,7 @@ func compline(args ...string) string {
 	return fmt.Sprintf("%#v", strings.Join(args, " "))
 }
 
-// ActionFish bridges completions registered in fish shell
+// ActionFish bridges completions registered in fish
 // (uses custom `config.fish` in “~/.config/carapace/bridge/fish`)
 func ActionFish(command ...string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
