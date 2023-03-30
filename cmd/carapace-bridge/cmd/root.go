@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
-	Example: `  carapace-bin completion:
+	Example: `  carapace-bridge completion:
     bash:       source <(carapace-bridge _carapace bash)
     elvish:     eval (carapace-bridge _carapace elvish | slurp)
     fish:       carapace-bridge _carapace fish | source
