@@ -9,13 +9,6 @@ import (
 	"github.com/rsteube/carapace/pkg/xdg"
 )
 
-func compline(args ...string) string {
-	for index, arg := range args {
-		args[index] = fmt.Sprintf("%#v", arg)
-	}
-	return fmt.Sprintf("%#v", strings.Join(args, " "))
-}
-
 // ActionFish bridges completions registered in fish
 // (uses custom `config.fish` in “~/.config/carapace/bridge/fish`)
 func ActionFish(command ...string) carapace.Action {
@@ -29,11 +22,20 @@ func ActionFish(command ...string) carapace.Action {
 			return carapace.ActionMessage(err.Error())
 		}
 
+		replacer := strings.NewReplacer(
+			` `, `\ `,
+			`"`, `\""`,
+		)
+
 		args := append(command, c.Args...)
 		args = append(args, c.CallbackValue)
-		snippet := fmt.Sprintf(`complete --do-complete=%v`, compline(args...))
+		for index, arg := range args {
+			args[index] = replacer.Replace(arg)
+		}
+		snippet := fmt.Sprintf(`complete --do-complete="%v"`, strings.Join(args, " ")) // TODO needs custom escaping
 
 		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
+		carapace.LOG.Println(snippet)
 		return carapace.ActionExecCommand("fish", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			nospace := false
