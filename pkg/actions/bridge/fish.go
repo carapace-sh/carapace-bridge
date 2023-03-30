@@ -38,7 +38,6 @@ func ActionFish(command ...string) carapace.Action {
 		carapace.LOG.Println(snippet)
 		return carapace.ActionExecCommand("fish", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
-			nospace := false
 
 			vals := make([]string, 0)
 			for _, line := range lines[:len(lines)-1] {
@@ -49,21 +48,13 @@ func ActionFish(command ...string) carapace.Action {
 				} else {
 					vals = append(vals, splitted[0], "")
 				}
-				if value := splitted[0]; !nospace && len(value) > 0 && strings.ContainsAny(value[len(value)-1:], `/=@:.,-`) {
-					nospace = true
-				}
-
 			}
-			a := carapace.ActionValuesDescribed(vals...).StyleF(func(s string, sc style.Context) string {
+			return carapace.ActionValuesDescribed(vals...).StyleF(func(s string, sc style.Context) string {
 				if strings.HasPrefix(s, "--") && strings.Contains(s, "=") {
 					s = strings.SplitN(s, "=", 2)[1] // assume optarg
 				}
 				return style.ForPath(s, sc)
 			})
-			if nospace {
-				a = a.NoSpace()
-			}
-			return a
-		}).Invoke(c).ToA()
+		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...)
 	})
 }
