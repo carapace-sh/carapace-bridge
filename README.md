@@ -1,5 +1,9 @@
 # carapace-bridge
 
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/rsteube/carapace-bridges)](https://pkg.go.dev/github.com/rsteube/carapace-bridge)
+[![GoReportCard](https://goreportcard.com/badge/github.com/rsteube/carapace-bridge)](https://goreportcard.com/report/github.com/rsteube/carapace-bridge)
+[![Coverage Status](https://coveralls.io/repos/github/rsteube/carapace-bridge/badge.svg?branch=master)](https://coveralls.io/github/rsteube/carapace-bridge?branch=master)
+
 Invokes completion of various frameworks and provides bridge actions for [carapace-bin](https://github.com/rsteube/carapace-bin).
 
 [![asciicast](https://asciinema.org/a/571396.svg)](https://asciinema.org/a/571396)
