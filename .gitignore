@@ -1,1 +1,4 @@
+cmd/carapace-bridge/carapace-bridge
 dist
+docs/book
+profile.cov
