@@ -10,6 +10,7 @@ Invokes completion of various frameworks and provides bridge actions for [carapa
 
 Supported frameworks:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
+- [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/rsteube/carapace)
 - [carapace-bin](https://github.com/rsteube/carapace-bin/)
 - [click](https://github.com/pallets/click)
