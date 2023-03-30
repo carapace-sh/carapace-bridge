@@ -11,7 +11,7 @@ import (
 	"github.com/rsteube/carapace/pkg/xdg"
 )
 
-// ActionZsh bridges completions registered in zsh shell
+// ActionZsh bridges completions registered in zsh
 // (uses custom `.zshrc` in “~/.config/carapace/bridge/zsh`)
 func ActionZsh(command ...string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
