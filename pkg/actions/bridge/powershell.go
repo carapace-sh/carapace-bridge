@@ -11,7 +11,7 @@ import (
 )
 
 // ActionPowershell bridges completions registered in powershell
-// TODO (uses custom `config.fish` in “~/.config/carapace/bridge/fish`)
+// (uses custom `Microsoft.PowerShell_profile.ps1` in “~/.config/carapace/bridge/powershell`)
 func ActionPowershell(command ...string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 		if len(command) == 0 {
@@ -22,6 +22,7 @@ func ActionPowershell(command ...string) carapace.Action {
 		if err != nil {
 			return carapace.ActionMessage(err.Error())
 		}
+		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
 
 		args := append(command, c.Args...)
 		args = append(args, c.CallbackValue)
@@ -33,8 +34,6 @@ func ActionPowershell(command ...string) carapace.Action {
 
 		line := strings.Join(args, " ")
 		snippet := fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json `, line, len(line))
-
-		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
 		return carapace.ActionExecCommand("pwsh", "-Command", snippet)(func(output []byte) carapace.Action {
 			if len(output) == 0 {
 				return carapace.ActionValues()
