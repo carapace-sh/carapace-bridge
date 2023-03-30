@@ -68,7 +68,11 @@ func ActionPowershell(command ...string) carapace.Action {
 				}
 				vals = append(vals, r.CompletionText, r.ToolTip)
 			}
-			return carapace.ActionValuesDescribed(vals...).NoSpace(suffixes...).StyleF(style.ForPath)
+			a := carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
+			if len(suffixes) > 0 {
+				return a.NoSpace(suffixes...)
+			}
+			return a
 		}).Invoke(c).ToA()
 	})
 }
