@@ -38,10 +38,13 @@ func ActionBash(command ...string) carapace.Action {
 		// args[index] = replacer.Replace(arg)
 		// }
 
-		rcfile := fmt.Sprintf("%v/carapace/bridge/bash/.bashrc", configDir)
+		configPath := fmt.Sprintf("%v/carapace/bridge/bash/.bashrc", configDir)
+		if err := ensureExists(configPath); err != nil {
+			return carapace.ActionMessage(err.Error())
+		}
+
 		c.Setenv("COMP_LINE", strings.Join(args, " "))
-		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
-		return carapace.ActionExecCommand("bash", "--rcfile", rcfile, "-i", "-c", bashSnippet, strings.Join(args, " "))(func(output []byte) carapace.Action {
+		return carapace.ActionExecCommand("bash", "--rcfile", configPath, "-i", "-c", bashSnippet, strings.Join(args, " "))(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			return carapace.ActionValues(lines[:len(lines)-1]...).StyleF(style.ForPath)
 		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...) // TODO check compopt for nospace

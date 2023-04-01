@@ -23,8 +23,8 @@ PROMPT=
 
 # load completion system
 autoload compinit
-compinit -d ${XDG_CONFIG_HOME:-~}/.zcompdump_capture
-source "${XDG_CONFIG_HOME:-~/.config}/zsh/.zshrc"
+compinit -d "${CARAPACE_BRIDGE_CONFIG_HOME:-~/.config}/carapace/bridge/zsh/.zcompdump_capture"
+source      "${CARAPACE_BRIDGE_CONFIG_HOME:-~/.config}/carapace/bridge/zsh/.zshrc"
 
 # never run a command
 bindkey ''^M'' undefined

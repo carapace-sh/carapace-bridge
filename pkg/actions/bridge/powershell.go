@@ -3,12 +3,25 @@ package bridge
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/rsteube/carapace"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/rsteube/carapace/pkg/xdg"
 )
+
+func ensureExists(path string) (err error) {
+	if _, err = os.Stat(path); err == nil || !os.IsNotExist(err) {
+		return
+	}
+	if err = os.MkdirAll(filepath.Dir(path), os.ModePerm); err != nil {
+		return
+	}
+	_, err = os.Create(path)
+	return
+}
 
 // ActionPowershell bridges completions registered in powershell
 // (uses custom `Microsoft.PowerShell_profile.ps1` in “~/.config/carapace/bridge/powershell`)
@@ -22,19 +35,25 @@ func ActionPowershell(command ...string) carapace.Action {
 		if err != nil {
 			return carapace.ActionMessage(err.Error())
 		}
-		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
+		configPath := fmt.Sprintf("%v/carapace/bridge/powershell/Microsoft.PowerShell_profile.ps1", configDir)
+		if err := ensureExists(configPath); err != nil {
+			return carapace.ActionMessage(err.Error())
+		}
 
 		args := append(command, c.Args...)
 		args = append(args, c.CallbackValue)
 
 		// for index, arg := range args {
-		// TODO handle different escape character and escapcing in general
+		// TODO handle different escape character and escaping in general
 		// args[index] = strings.Replace(arg, " ", "` ", -1)
 		// }
 
 		line := strings.Join(args, " ")
-		snippet := fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json `, line, len(line))
-		return carapace.ActionExecCommand("pwsh", "-Command", snippet)(func(output []byte) carapace.Action {
+		snippet := []string{
+			fmt.Sprintf(`Get-Content "%v/carapace/bridge/powershell/Microsoft.PowerShell_profile.ps1" | Out-String | Invoke-Expression`, configDir),
+			fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json `, line, len(line)),
+		}
+		return carapace.ActionExecCommand("pwsh", "-Command", strings.Join(snippet, ";"))(func(output []byte) carapace.Action {
 			if len(output) == 0 {
 				return carapace.ActionValues()
 			}

@@ -32,11 +32,14 @@ func ActionFish(command ...string) carapace.Action {
 		for index, arg := range args {
 			args[index] = replacer.Replace(arg)
 		}
-		snippet := fmt.Sprintf(`complete --do-complete="%v"`, strings.Join(args, " ")) // TODO needs custom escaping
 
-		c.Setenv("XDG_CONFIG_HOME", fmt.Sprintf("%v/carapace/bridge", configDir))
-		carapace.LOG.Println(snippet)
-		return carapace.ActionExecCommand("fish", "--command", snippet)(func(output []byte) carapace.Action {
+		configPath := fmt.Sprintf("%v/carapace/bridge/fish/config.fish", configDir)
+		if err := ensureExists(configPath); err != nil {
+			return carapace.ActionMessage(err.Error())
+		}
+
+		snippet := fmt.Sprintf(`source %#v;complete --do-complete="%v"`, configPath, strings.Join(args, " ")) // TODO needs custom escaping
+		return carapace.ActionExecCommand("fish", "--no-config", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 
 			vals := make([]string, 0)
@@ -55,6 +58,6 @@ func ActionFish(command ...string) carapace.Action {
 				}
 				return style.ForPath(s, sc)
 			})
-		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...)
+		}).NoSpace([]rune("/=@:.,")...)
 	})
 }
