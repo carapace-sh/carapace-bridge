@@ -6,7 +6,7 @@
 
 Invokes completion of various frameworks and provides bridge actions for [carapace-bin](https://github.com/rsteube/carapace-bin).
 
-[![asciicast](https://asciinema.org/a/571396.svg)](https://asciinema.org/a/571396)
+[![asciicast](https://asciinema.org/a/574303.svg)](https://asciinema.org/a/574303)
 
 Supported frameworks:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
