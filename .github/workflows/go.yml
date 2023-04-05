@@ -48,3 +48,6 @@ jobs:
         args: release --clean
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AUR_KEY: ${{ secrets.AUR_KEY }}
+        FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
+        GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
