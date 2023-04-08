@@ -47,6 +47,7 @@ func init() {
 	addSubCommand("complete", "bridges https://github.com/posener/complete", bridge.ActionComplete)
 	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
+	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecli)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
 	addSubCommand("zsh", "bridges completions registered in zsh", bridge.ActionZsh)
 }

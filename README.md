@@ -19,6 +19,7 @@ Supported frameworks:
 - [complete](https://github.com/posener/complete)
 - [fish](https://fishshell.com/)
 - [powershell](https://microsoft.com/powershell)
+- [urfavecli](https://github.com/urfave/cli)
 - [yargs](https://github.com/yargs/yargs)
 - [zsh](https://www.zsh.org/)
 
