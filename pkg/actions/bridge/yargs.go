@@ -42,7 +42,7 @@ func ActionYargs(command ...string) carapace.Action {
 		args := []string{"--get-yargs-completions"}
 		args = append(args, command[1:]...)
 		args = append(args, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 

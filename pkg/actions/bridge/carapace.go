@@ -14,7 +14,7 @@ func ActionCarapace(command ...string) carapace.Action {
 		args := []string{"_carapace", "export", ""}
 		args = append(args, command[1:]...)
 		args = append(args, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
 			if string(output) == "" {
 				return carapace.ActionValues()
@@ -34,7 +34,7 @@ func ActionCarapaceBin(command ...string) carapace.Action {
 		args := []string{command[0], "export", ""}
 		args = append(args, command[1:]...)
 		args = append(args, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 		return carapace.ActionExecCommand("carapace", args...)(func(output []byte) carapace.Action {
 			if string(output) == "" {
 				return carapace.ActionFiles()

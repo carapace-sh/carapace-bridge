@@ -21,7 +21,7 @@ func ActionZsh(command ...string) carapace.Action {
 		args := []string{"--no-rcs", "-c", zsh.Script, "--"}
 		args = append(args, command...)
 		args = append(args, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 
 		configDir, err := xdg.UserConfigDir()
 		if err != nil {

@@ -14,7 +14,7 @@ func ActionUrfavecli(command ...string) carapace.Action {
 		}
 
 		args := append(command[1:], c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 		args = append(args, "--generate-bash-completion")
 		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")

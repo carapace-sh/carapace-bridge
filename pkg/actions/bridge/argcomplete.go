@@ -39,7 +39,7 @@ func ActionArgcomplete(command ...string) carapace.Action {
 		}
 
 		args := append(command[1:], c.Args...)
-		current := c.CallbackValue
+		current := c.Value
 
 		prefix := ""
 		if strings.HasPrefix(current, "--") {
@@ -70,7 +70,7 @@ func ActionArgcomplete(command ...string) carapace.Action {
 		a := carapace.ActionExecCommand("sh", "-c", command[0]+" 8>&1 9>&2 1>/dev/null 2>/dev/null")(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			vals := make([]string, 0)
-			isFlag := strings.HasPrefix(c.CallbackValue, "-")
+			isFlag := strings.HasPrefix(c.Value, "-")
 			for _, line := range lines[:len(lines)-1] {
 				if !isFlag && strings.HasPrefix(line, "-") {
 					continue
@@ -90,8 +90,8 @@ func ActionArgcomplete(command ...string) carapace.Action {
 
 			if len(vals) == 0 {
 				// fallback to file completions when no values returned
-				if index := strings.Index(c.CallbackValue, "="); index > -1 {
-					return carapace.ActionFiles().Invoke(carapace.Context{CallbackValue: c.CallbackValue[index+1:]}).ToA()
+				if index := strings.Index(c.Value, "="); index > -1 {
+					return carapace.ActionFiles().Invoke(carapace.Context{Value: c.Value[index+1:]}).ToA()
 				}
 				return carapace.ActionFiles()
 			}
