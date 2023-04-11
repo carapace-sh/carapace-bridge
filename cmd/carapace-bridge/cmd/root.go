@@ -122,7 +122,7 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 		carapace.ActionMultiParts("/", func(c carapace.Context) carapace.Action {
 			switch len(c.Parts) {
 			case 0:
-				return carapace.ActionPathExecutables()
+				return carapace.ActionExecutables()
 			case 1:
 				return carapace.ActionStyledValues(
 					"bash", "#d35673",
