@@ -41,7 +41,7 @@ func ActionPowershell(command ...string) carapace.Action {
 		}
 
 		args := append(command, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 
 		// for index, arg := range args {
 		// TODO handle different escape character and escaping in general

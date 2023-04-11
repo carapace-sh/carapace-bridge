@@ -32,7 +32,7 @@ func ActionBash(command ...string) carapace.Action {
 		// )
 
 		args := append(command, c.Args...)
-		args = append(args, c.CallbackValue)
+		args = append(args, c.Value)
 
 		// for index, arg := range args {
 		// args[index] = replacer.Replace(arg)

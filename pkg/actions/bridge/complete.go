@@ -34,7 +34,7 @@ func ActionComplete(command ...string) carapace.Action {
 		}
 
 		c.Args = append(command[1:], c.Args...)
-		c.Setenv("COMP_LINE", fmt.Sprintf("%v %v %v", command[0], strings.Join(c.Args, " "), c.CallbackValue))
+		c.Setenv("COMP_LINE", fmt.Sprintf("%v %v %v", command[0], strings.Join(c.Args, " "), c.Value))
 		return carapace.ActionExecCommand(command[0])(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 

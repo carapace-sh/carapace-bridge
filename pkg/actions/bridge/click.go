@@ -40,7 +40,7 @@ func ActionClick(command ...string) carapace.Action {
 		}
 
 		args := append(command[1:], c.Args...)
-		current := c.CallbackValue
+		current := c.Value
 
 		compLine := command[0] + " " + strings.Join(append(args, current), " ") // TODO escape/quote special characters
 		c.Setenv(fmt.Sprintf("_%v_COMPLETE", strings.ToUpper(command[0])), "zsh_complete")
