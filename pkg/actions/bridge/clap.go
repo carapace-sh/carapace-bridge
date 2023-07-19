@@ -1,16 +1,17 @@
 package bridge
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/rsteube/carapace"
 )
 
-// ActionKingpin bridges https://github.com/alecthomas/kingpin
+// ActionClap bridges https://github.com/clap-rs/clap
 //
 //	var rootCmd = &cobra.Command{
-//		Use:                "tsh",
-//		Short:              "Teleport Command Line Client",
+//		Use:                "dynamic",
+//		Short:              "dynamic example",
 //		Run:                func(cmd *cobra.Command, args []string) {},
 //		DisableFlagParsing: true,
 //	}
@@ -23,17 +24,18 @@ import (
 //		carapace.Gen(rootCmd).Standalone()
 //
 //		carapace.Gen(rootCmd).PositionalAnyCompletion(
-//			bridge.ActionKingpin("tsh"),
+//			bridge.ActionClap("dynamic"),
 //		)
 //	}
-func ActionKingpin(command ...string) carapace.Action {
+func ActionClap(command ...string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionKingpin]")
+			return carapace.ActionMessage("missing argument [ActionClap]")
 		}
 
-		args := []string{"--completion-bash"}
-		args = append(args, command[1:]...)
+		index := len(append(command, c.Args...))
+		args := []string{"complete", "--index", strconv.Itoa(index), "--type", "9", "--no-space", "--ifs=\n", "--"}
+		args = append(args, command...)
 		args = append(args, c.Args...)
 		args = append(args, c.Value)
 		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
