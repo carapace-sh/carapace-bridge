@@ -42,6 +42,7 @@ func init() {
 	addSubCommand("bash", "bridges completions registered in bash", bridge.ActionBash)
 	addSubCommand("carapace-bin", "bridges completions registered in carapace-bin", bridge.ActionCarapaceBin)
 	addSubCommand("carapace", "bridges https://github.com/rsteube/carapace", bridge.ActionCarapace)
+	addSubCommand("clap", "bridges https://github.com/clap-rs/clap", bridge.ActionClap)
 	addSubCommand("click", "bridges https://github.com/pallets/click", bridge.ActionClick)
 	addSubCommand("cobra", "bridges https://github.com/spf13/cobra", bridge.ActionCobra)
 	addSubCommand("complete", "bridges https://github.com/posener/complete", bridge.ActionComplete)

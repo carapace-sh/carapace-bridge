@@ -14,6 +14,7 @@ Supported frameworks:
 - [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/rsteube/carapace)
 - [carapace-bin](https://github.com/rsteube/carapace-bin/)
+- [clap](https://github.com/clap-rs/clap)
 - [click](https://github.com/pallets/click)
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
