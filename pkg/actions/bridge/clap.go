@@ -41,10 +41,6 @@ func ActionClap(command ...string) carapace.Action {
 		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 
-			if len(lines) < 2 && !strings.HasPrefix(c.Value, "-") {
-				return carapace.ActionFiles()
-			}
-
 			a := carapace.ActionValues(lines...)
 			for _, line := range lines {
 				if len(line) > 0 && strings.ContainsAny(line[:len(line)-1], "/=@:.,") {
