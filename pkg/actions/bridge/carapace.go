@@ -76,3 +76,19 @@ func actionCommand(command ...string) func(f func(command ...string) carapace.Ac
 		})
 	}
 }
+
+// ActionCarapace bridges macros exposed with https://github.com/rsteube/carapace-bin
+func ActionMacro(command ...string) carapace.Action {
+	return actionCommand(command...)(func(command ...string) carapace.Action {
+		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+			args := []string{"_carapace", "macro"}
+			args = append(args, command[1:]...)
+			args = append(args, c.Args...)
+			args = append(args, c.Value)
+
+			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
+				return carapace.ActionImport(output)
+			})
+		})
+	})
+}
