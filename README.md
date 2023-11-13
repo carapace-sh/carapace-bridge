@@ -19,6 +19,7 @@ Supported frameworks:
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
 - [fish](https://fishshell.com/)
+- [inshellisense](https://github.com/microsoft/inshellisense)
 - [kingpin](https://github.com/alecthomas/kingpin)
 - [powershell](https://microsoft.com/powershell)
 - [urfavecli](https://github.com/urfave/cli)
