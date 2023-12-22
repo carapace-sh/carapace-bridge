@@ -3,7 +3,6 @@ package bridge
 import (
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/rsteube/carapace"
 	"github.com/spf13/cobra"
@@ -34,7 +33,7 @@ func ActionCarapaceBin(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 			cmd := "carapace"
-			if executable, err := os.Executable(); err == nil && strings.HasPrefix(executable, os.TempDir()) && filepath.Base(executable) == "carapace" {
+			if executable, err := os.Executable(); err == nil && filepath.Base(executable) == "carapace" {
 				cmd = executable // workaround for sandbox tests: directly call executable which was built with "go run"
 			}
 
