@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/rsteube/carapace"
+	shlex "github.com/rsteube/carapace-shlex"
 )
 
 // ActionInshellisense bridges https://github.com/microsoft/inshellisense
@@ -16,7 +17,14 @@ func ActionInshellisense(command ...string) carapace.Action {
 
 		args := append(command, c.Args...)
 		args = append(args, c.Value)
-		input := strings.Join(args, " ") // TODO simple join for now as the lexer in inshellisense can't handle quotes and spaces anyway
+
+		input := shlex.Join(args)
+
+		if strings.HasSuffix(input, `""`) {
+			// TODO temporary fix as inshellisense can't handle quotes yet (won't work for those within)
+			input = input[:len(input)-2] + " "
+		}
+
 		return carapace.ActionExecCommand("inshellisense", "complete", input)(func(output []byte) carapace.Action {
 			var r struct {
 				Suggestions []struct {
