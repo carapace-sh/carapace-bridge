@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/rsteube/carapace"
+	shlex "github.com/rsteube/carapace-shlex"
 )
 
 // ActionClick bridges https://github.com/pallets/click
@@ -42,7 +43,7 @@ func ActionClick(command ...string) carapace.Action {
 		args := append(command[1:], c.Args...)
 		current := c.Value
 
-		compLine := command[0] + " " + strings.Join(append(args, current), " ") // TODO escape/quote special characters
+		compLine := command[0] + " " + shlex.Join(append(args, current))
 		c.Setenv(fmt.Sprintf("_%v_COMPLETE", strings.ToUpper(command[0])), "zsh_complete")
 		c.Setenv("COMP_WORDS", compLine)
 		c.Setenv("COMP_CWORD", strconv.Itoa(len(args)+1))

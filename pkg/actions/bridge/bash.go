@@ -3,9 +3,11 @@ package bridge
 import (
 	_ "embed"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/rsteube/carapace"
+	shlex "github.com/rsteube/carapace-shlex"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/rsteube/carapace/pkg/xdg"
 )
@@ -18,7 +20,7 @@ var bashSnippet string
 func ActionBash(command ...string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionFish]")
+			return carapace.ActionMessage("missing argument [ActionBash]")
 		}
 
 		configDir, err := xdg.UserConfigDir()
@@ -26,25 +28,29 @@ func ActionBash(command ...string) carapace.Action {
 			return carapace.ActionMessage(err.Error())
 		}
 
-		// replacer := strings.NewReplacer(
-		// ` `, `\ `,
-		// `"`, `\""`,
-		// )
-
 		args := append(command, c.Args...)
 		args = append(args, c.Value)
-
-		// for index, arg := range args {
-		// args[index] = replacer.Replace(arg)
-		// }
 
 		configPath := fmt.Sprintf("%v/carapace/bridge/bash/.bashrc", configDir)
 		if err := ensureExists(configPath); err != nil {
 			return carapace.ActionMessage(err.Error())
 		}
 
-		c.Setenv("COMP_LINE", strings.Join(args, " "))
-		return carapace.ActionExecCommand("bash", "--rcfile", configPath, "-i", "-c", bashSnippet, strings.Join(args, " "))(func(output []byte) carapace.Action {
+		joined := shlex.Join(args)
+		if c.Value == "" {
+			joined = strings.TrimSuffix(joined, `""`)
+		}
+		c.Setenv("COMP_LINE", joined)
+
+		file, err := os.CreateTemp(os.TempDir(), "carapace-bridge_bash_*")
+		if err != nil {
+			return carapace.ActionMessage(err.Error())
+		}
+		defer os.Remove(file.Name())
+
+		os.WriteFile(file.Name(), []byte(bashSnippet), os.ModePerm)
+
+		return carapace.ActionExecCommand("bash", "--rcfile", configPath, "-i", file.Name())(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 			return carapace.ActionValues(lines[:len(lines)-1]...).StyleF(style.ForPath)
 		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...) // TODO check compopt for nospace

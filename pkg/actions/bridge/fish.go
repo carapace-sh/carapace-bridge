@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/rsteube/carapace"
+	shlex "github.com/rsteube/carapace-shlex"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/rsteube/carapace/pkg/xdg"
 )
@@ -22,23 +23,15 @@ func ActionFish(command ...string) carapace.Action {
 			return carapace.ActionMessage(err.Error())
 		}
 
-		replacer := strings.NewReplacer(
-			` `, `\ `,
-			`"`, `\""`,
-		)
-
 		args := append(command, c.Args...)
 		args = append(args, c.Value)
-		for index, arg := range args {
-			args[index] = replacer.Replace(arg)
-		}
 
 		configPath := fmt.Sprintf("%v/carapace/bridge/fish/config.fish", configDir)
 		if err := ensureExists(configPath); err != nil {
 			return carapace.ActionMessage(err.Error())
 		}
 
-		snippet := fmt.Sprintf(`source %#v;complete --do-complete="%v"`, configPath, strings.Join(args, " ")) // TODO needs custom escaping
+		snippet := fmt.Sprintf(`source "$__fish_data_dir/config.fish";source %#v;complete --do-complete="%v"`, configPath, shlex.Join(args)) // TODO needs custom escaping
 		return carapace.ActionExecCommand("fish", "--no-config", "--command", snippet)(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
 

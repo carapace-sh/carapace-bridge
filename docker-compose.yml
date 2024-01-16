@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  bridge:
+    build: .
+    command: elvish
+    environment:
+      TARGET: /carapace-bridge/cmd/carapace-bridge/carapace-bridge
+    volumes:
+      - '.:/carapace-bridge/'
