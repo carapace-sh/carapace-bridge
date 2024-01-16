@@ -69,6 +69,6 @@ func ActionZsh(command ...string) carapace.Action {
 				}
 			}
 			return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
-		}).Invoke(c).ToA()
+		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...)
 	})
 }
