@@ -65,7 +65,12 @@ func ActionBash(command ...string) carapace.Action {
 					vals = append(vals, strings.TrimSpace(line), "")
 				}
 			}
-			return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
+			switch len(vals) {
+			case 0:
+				return carapace.ActionFiles()
+			default:
+				return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
+			}
 		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...) // TODO check compopt for nospace
 	})
 }
