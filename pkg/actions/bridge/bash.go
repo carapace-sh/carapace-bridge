@@ -62,7 +62,7 @@ func ActionBash(command ...string) carapace.Action {
 						strings.TrimSpace(strings.TrimSuffix(splitted[1], ")")),
 					)
 				} else {
-					vals = append(vals, strings.TrimSpace(line))
+					vals = append(vals, strings.TrimSpace(line), "")
 				}
 			}
 			return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
