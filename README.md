@@ -9,7 +9,7 @@ Invokes completion of various frameworks and provides bridge actions for [carapa
 
 [![asciicast](https://asciinema.org/a/574303.svg)](https://asciinema.org/a/574303)
 
-Supported frameworks:
+Supported inputs:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
 - [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/rsteube/carapace)
@@ -26,7 +26,7 @@ Supported frameworks:
 - [yargs](https://github.com/yargs/yargs)
 - [zsh](https://www.zsh.org/)
 
-Supported shells:
+Supported outputs:
 - [Bash](https://www.gnu.org/software/bash/)
 - [Elvish](https://elv.sh/)
 - [Fish](https://fishshell.com/)
