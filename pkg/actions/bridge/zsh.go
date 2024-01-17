@@ -8,6 +8,7 @@ import (
 	"github.com/rsteube/carapace-bridge/third_party/github.com/Valodim/zsh-capture-completion"
 	"github.com/rsteube/carapace/pkg/style"
 	"github.com/rsteube/carapace/pkg/xdg"
+	"github.com/rsteube/carapace/third_party/github.com/acarl005/stripansi"
 )
 
 // ActionZsh bridges completions registered in zsh
@@ -63,9 +64,9 @@ func ActionZsh(command ...string) carapace.Action {
 			for _, line := range lines[:len(lines)-1] {
 				line = unquoter.Replace(line)
 				if splitted := strings.SplitN(line, " -- ", 2); len(splitted) == 1 {
-					vals = append(vals, splitted[0], "")
+					vals = append(vals, stripansi.Strip(splitted[0]), "")
 				} else {
-					vals = append(vals, splitted[0], splitted[1])
+					vals = append(vals, stripansi.Strip(splitted[0]), splitted[1])
 				}
 			}
 			return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
