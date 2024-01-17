@@ -52,7 +52,20 @@ func ActionBash(command ...string) carapace.Action {
 
 		return carapace.ActionExecCommand("bash", "--rcfile", configPath, "-i", file.Name())(func(output []byte) carapace.Action {
 			lines := strings.Split(string(output), "\n")
-			return carapace.ActionValues(lines[:len(lines)-1]...).StyleF(style.ForPath)
+
+			vals := make([]string, 0)
+			for _, line := range lines[:len(lines)-1] {
+				if splitted := strings.SplitN(line, "(", 2); len(splitted) == 2 {
+					// assume results contain descriptions in the format `value (description)` (spf13/cobra, rsteube/carapace)
+					vals = append(vals,
+						strings.TrimSpace(splitted[0]),
+						strings.TrimSpace(strings.TrimSuffix(splitted[1], ")")),
+					)
+				} else {
+					vals = append(vals, strings.TrimSpace(line))
+				}
+			}
+			return carapace.ActionValuesDescribed(vals...).StyleF(style.ForPath)
 		}).Invoke(c).ToA().NoSpace([]rune("/=@:.,")...) // TODO check compopt for nospace
 	})
 }
