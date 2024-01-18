@@ -29,6 +29,7 @@ func ActionInshellisense(command ...string) carapace.Action {
 			var r struct {
 				Suggestions []struct {
 					Name        string
+					AllNames    []string `json:"allNames"`
 					Description string
 				}
 			}
@@ -39,13 +40,15 @@ func ActionInshellisense(command ...string) carapace.Action {
 
 			vals := make([]string, 0)
 			for _, s := range r.Suggestions {
-				if !strings.HasPrefix(c.Value, "-") && strings.HasPrefix(s.Name, "-") {
-					continue
-				}
+				for _, name := range s.AllNames {
+					if !strings.HasPrefix(c.Value, "-") && strings.HasPrefix(name, "-") {
+						continue
+					}
 
-				if strings.HasPrefix(s.Name, c.Value) ||
-					(strings.HasPrefix(c.Value, "-") && strings.Contains(c.Value, "=")) {
-					vals = append(vals, s.Name, s.Description)
+					if strings.HasPrefix(name, c.Value) ||
+						(strings.HasPrefix(c.Value, "-") && strings.Contains(c.Value, "=")) {
+						vals = append(vals, name, s.Description)
+					}
 				}
 			}
 			a := carapace.ActionValuesDescribed(vals...)
