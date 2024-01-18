@@ -25,6 +25,10 @@ func ActionBridges(command ...string) carapace.Action {
 				if slices.Contains(bridges.Fish(), command[0]) { // TODO performance/caching
 					ActionFish(command...)
 				}
+			case "inshellisense":
+				if slices.Contains(bridges.Inshellisense(), command[0]) { // TODO performance/caching
+					ActionInshellisense(command...)
+				}
 			case "zsh":
 				if slices.Contains(bridges.Zsh(), command[0]) { // TODO performance/caching
 					return ActionZsh(command...)
