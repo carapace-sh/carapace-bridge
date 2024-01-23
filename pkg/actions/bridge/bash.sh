@@ -8,9 +8,10 @@ COMP_CWORD=$((${#COMP_WORDS[@]} - 1))
 COMP_POINT=${#COMP_LINE}
 
 # bash-completions
-[ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion # osx
-[ -f /usr/share/bash-completion/bash_completion ] && source /usr/share/bash-completion/bash_completion # linux
 [ -f /data/data/com.termux/files/usr/share/bash-completion/bash_completion ] && source /data/data/com.termux/files/usr/share/bash-completion/bash_completion # termux
+[ -f /usr/local/share/bash-completion/bash_completion ] && source /usr/local/share/bash-completion/bash_completion # osx
+[ -f /usr/share/bash-completion/bash_completion ] && source /usr/share/bash-completion/bash_completion # linux
+
 __load_completion "${COMP_WORDS[0]}"
 
 $"$(complete -p "${COMP_WORDS[0]}" | sed -r 's/.* -F ([^ ]+).*/\1/')"
