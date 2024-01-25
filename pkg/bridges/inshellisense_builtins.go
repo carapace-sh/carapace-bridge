@@ -1,6 +1,9 @@
 package bridges
 
 var inshellisenseBuiltins = []string{
-	// TODO filter unwanted completers
 	"cd",
+	"cp",
+	"echo",
+	"rm",
+	"rmdir",
 }

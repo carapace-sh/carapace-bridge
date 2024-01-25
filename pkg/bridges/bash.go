@@ -16,18 +16,26 @@ func Bash() []string {
 		return []string{}
 	}
 
-	// TODO handle different OS/locations
-	// TODO completions provides by bash itself
-	entries, err := os.ReadDir("/usr/share/bash-completion/completions")
-	if err != nil {
-		return []string{}
-	}
-
 	unique := make(map[string]bool)
-	for _, entry := range entries {
-		if !entry.IsDir() && !strings.HasPrefix(entry.Name(), "_") {
-			unique[entry.Name()] = true
+	for _, location := range []string{
+		"/data/data/com.termux/files/etc/bash_completion.d",                 // termux
+		"/data/data/com.termux/files/usr/share/bash-completion/completions", // termux
+		"/etc/bash_completion.d",                                            // linux
+		"/usr/local/etc/bash_completion.d",                                  // osx
+		"/usr/local/share/bash-completion/completions",                      // osx
+		"/usr/share/bash-completion/completions",                            // linux
+	} {
+		entries, err := os.ReadDir(location)
+		if err != nil {
+			continue
 		}
+
+		for _, entry := range entries {
+			if !entry.IsDir() && !strings.HasPrefix(entry.Name(), "_") {
+				unique[entry.Name()] = true
+			}
+		}
+		break
 	}
 
 	completers := make([]string, 0)
