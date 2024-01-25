@@ -6,6 +6,7 @@ import (
 
 	"github.com/rsteube/carapace"
 	shlex "github.com/rsteube/carapace-shlex"
+	"github.com/rsteube/carapace/pkg/style"
 )
 
 // ActionInshellisense bridges https://github.com/microsoft/inshellisense
@@ -31,6 +32,7 @@ func ActionInshellisense(command ...string) carapace.Action {
 					Name        string
 					AllNames    []string `json:"allNames"`
 					Description string
+					Icon        string
 				}
 			}
 
@@ -39,6 +41,8 @@ func ActionInshellisense(command ...string) carapace.Action {
 			}
 
 			vals := make([]string, 0)
+			flags := make([]string, 0)
+			files := make([]string, 0)
 			for _, s := range r.Suggestions {
 				for _, name := range s.AllNames {
 					if !strings.HasPrefix(c.Value, "-") && strings.HasPrefix(name, "-") {
@@ -47,11 +51,22 @@ func ActionInshellisense(command ...string) carapace.Action {
 
 					if strings.HasPrefix(name, c.Value) ||
 						(strings.HasPrefix(c.Value, "-") && strings.Contains(c.Value, "=")) {
-						vals = append(vals, name, s.Description)
+						switch s.Icon {
+						case "📀":
+							files = append(files, name, s.Description)
+						case "🔗":
+							flags = append(flags, name, s.Description)
+						default:
+							vals = append(vals, name, s.Description)
+						}
 					}
 				}
 			}
-			a := carapace.ActionValuesDescribed(vals...)
+			a := carapace.Batch(
+				carapace.ActionValuesDescribed(vals...),
+				carapace.ActionValuesDescribed(flags...).Tag("flags"),
+				carapace.ActionValuesDescribed(files...).StyleF(style.ForPathExt).Tag("files"),
+			).ToA()
 			if strings.HasPrefix(c.Value, "-") && strings.Contains(c.Value, "=") {
 				a = a.Prefix(strings.SplitAfterN(c.Value, "=", 2)[0])
 			}
