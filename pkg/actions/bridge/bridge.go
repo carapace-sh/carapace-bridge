@@ -54,19 +54,19 @@ func ActionBridges(command ...string) carapace.Action {
 		for _, b := range env.Bridges() {
 			switch b {
 			case "bash":
-				if slices.Contains(bridges.Bash(), command[0]) { // TODO performance/caching
+				if slices.Contains(bridges.Bash(), command[0]) {
 					return ActionBash(command...)
 				}
 			case "fish":
-				if slices.Contains(bridges.Fish(), command[0]) { // TODO performance/caching
+				if slices.Contains(bridges.Fish(), command[0]) {
 					ActionFish(command...)
 				}
 			case "inshellisense":
-				if slices.Contains(bridges.Inshellisense(), command[0]) { // TODO performance/caching
+				if slices.Contains(bridges.Inshellisense(), command[0]) {
 					ActionInshellisense(command...)
 				}
 			case "zsh":
-				if slices.Contains(bridges.Zsh(), command[0]) { // TODO performance/caching
+				if slices.Contains(bridges.Zsh(), command[0]) {
 					return ActionZsh(command...)
 				}
 			}
