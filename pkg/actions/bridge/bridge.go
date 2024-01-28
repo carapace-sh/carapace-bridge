@@ -16,7 +16,6 @@ func ActionBridges(command ...string) carapace.Action {
 		}
 
 		if bridge, ok := bridges.Config()[command[0]]; ok {
-			carapace.LOG.Println("configbridge: " + bridge)
 			switch bridge {
 			case "argcomplete":
 				return ActionArgcomplete(command...)
