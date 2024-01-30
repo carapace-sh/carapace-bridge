@@ -58,11 +58,11 @@ func ActionBridges(command ...string) carapace.Action {
 				}
 			case "fish":
 				if slices.Contains(bridges.Fish(), command[0]) {
-					ActionFish(command...)
+					return ActionFish(command...)
 				}
 			case "inshellisense":
 				if slices.Contains(bridges.Inshellisense(), command[0]) {
-					ActionInshellisense(command...)
+					return ActionInshellisense(command...)
 				}
 			case "zsh":
 				if slices.Contains(bridges.Zsh(), command[0]) {
