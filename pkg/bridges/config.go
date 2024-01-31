@@ -28,6 +28,5 @@ func Config() map[string]string {
 		carapace.LOG.Println(err.Error())
 		return make(map[string]string)
 	}
-	carapace.LOG.Printf("%#v", completers)
 	return completers
 }
