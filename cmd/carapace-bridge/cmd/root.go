@@ -49,19 +49,7 @@ func init() {
 	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
 	addSubCommand("inshellisense", "bridges https://github.com/microsoft/inshellisense", bridge.ActionInshellisense)
 	addSubCommand("kingpin", "bridges https://github.com/alecthomas/kingpin", bridge.ActionKingpin)
-	addSubCommand("macro", "bridges macros exposed with https://github.com/rsteube/carapace-spec", func(s ...string) carapace.Action {
-		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-			switch len(c.Args) {
-			case 0:
-				return carapace.ActionExecCommand(s[0], "_carapace", "macro")(func(output []byte) carapace.Action {
-					lines := strings.Split(string(output), "\n")
-					return carapace.ActionValues(lines[:len(lines)-1]...).MultiParts(".")
-				})
-			default:
-				return bridge.ActionMacro(s[0], c.Args[0]).Shift(1)
-			}
-		})
-	})
+	addSubCommand("macro", "bridges macros exposed with https://github.com/rsteube/carapace-spec", bridge.ActionMacro)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
 	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecli)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)

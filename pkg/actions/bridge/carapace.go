@@ -3,6 +3,7 @@ package bridge
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/rsteube/carapace"
 	"github.com/spf13/cobra"
@@ -86,9 +87,17 @@ func ActionMacro(command ...string) carapace.Action {
 			args = append(args, c.Args...)
 			args = append(args, c.Value)
 
-			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
-				return carapace.ActionImport(output)
-			})
+			switch len(append(command, c.Args...)) {
+			case 1:
+				return carapace.ActionExecCommand(command[0], "_carapace", "macro")(func(output []byte) carapace.Action {
+					lines := strings.Split(string(output), "\n")
+					return carapace.ActionValues(lines[:len(lines)-1]...).MultiParts(".")
+				})
+			default:
+				return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
+					return carapace.ActionImport(output)
+				}).Shift(1)
+			}
 		})
 	})
 }
