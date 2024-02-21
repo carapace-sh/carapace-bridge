@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/rsteube/carapace"
 	"github.com/rsteube/carapace/pkg/execlog"
 )
 
@@ -23,13 +22,13 @@ func Bash() []string {
 		for _, location := range bashCompletionLocations() {
 			entries, err := os.ReadDir(location)
 			if err != nil {
-				carapace.LOG.Println(err.Error())
 				continue
 			}
 
 			for _, entry := range entries {
 				if !entry.IsDir() && !strings.HasPrefix(entry.Name(), "_") {
-					unique[entry.Name()] = true
+					name := strings.TrimSuffix(entry.Name(), ".bash")
+					unique[name] = true
 				}
 			}
 		}
