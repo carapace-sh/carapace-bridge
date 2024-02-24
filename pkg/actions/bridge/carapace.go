@@ -11,20 +11,18 @@ import (
 
 // ActionCarapace bridges https://github.com/rsteube/carapace
 func ActionCarapace(command ...string) carapace.Action {
-	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionCarapace]")
-		}
-
-		args := []string{"_carapace", "export", ""}
-		args = append(args, command[1:]...)
-		args = append(args, c.Args...)
-		args = append(args, c.Value)
-		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
-			if string(output) == "" {
-				return carapace.ActionValues()
-			}
-			return carapace.ActionImport(output)
+	return actionCommand(command...)(func(command ...string) carapace.Action {
+		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+			args := []string{"_carapace", "export", ""}
+			args = append(args, command[1:]...)
+			args = append(args, c.Args...)
+			args = append(args, c.Value)
+			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
+				if string(output) == "" {
+					return carapace.ActionValues()
+				}
+				return carapace.ActionImport(output)
+			})
 		})
 	})
 }

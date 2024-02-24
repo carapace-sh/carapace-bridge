@@ -28,40 +28,38 @@ import (
 //		)
 //	}
 func ActionYargs(command ...string) carapace.Action {
-	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionYargs]")
-		}
+	return actionCommand(command...)(func(command ...string) carapace.Action {
+		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+			if _, err := exec.LookPath(command[0]); err != nil {
+				return carapace.ActionMessage(err.Error())
+			}
 
-		if _, err := exec.LookPath(command[0]); err != nil {
-			return carapace.ActionMessage(err.Error())
-		}
+			c.Setenv("SHELL", "zsh")
 
-		c.Setenv("SHELL", "zsh")
+			args := []string{"--get-yargs-completions"}
+			args = append(args, command[1:]...)
+			args = append(args, c.Args...)
+			args = append(args, c.Value)
+			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
+				lines := strings.Split(string(output), "\n")
 
-		args := []string{"--get-yargs-completions"}
-		args = append(args, command[1:]...)
-		args = append(args, c.Args...)
-		args = append(args, c.Value)
-		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
-			lines := strings.Split(string(output), "\n")
-
-			vals := make([]string, 0)
-			for _, line := range lines {
-				if line != "" {
-					splitted := strings.SplitN(line, ":", 2)
-					name := splitted[0]
-					description := ""
-					if len(splitted) > 1 {
-						description = splitted[1]
+				vals := make([]string, 0)
+				for _, line := range lines {
+					if line != "" {
+						splitted := strings.SplitN(line, ":", 2)
+						name := splitted[0]
+						description := ""
+						if len(splitted) > 1 {
+							description = splitted[1]
+						}
+						vals = append(vals, name, description)
 					}
-					vals = append(vals, name, description)
 				}
-			}
-			if len(vals) == 0 {
-				return carapace.ActionFiles()
-			}
-			return carapace.ActionValuesDescribed(vals...)
-		}).Invoke(c).ToA()
+				if len(vals) == 0 {
+					return carapace.ActionFiles()
+				}
+				return carapace.ActionValuesDescribed(vals...)
+			}).Invoke(c).ToA()
+		})
 	})
 }
