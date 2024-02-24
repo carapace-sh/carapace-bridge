@@ -29,48 +29,46 @@ import (
 //		)
 //	}
 func ActionCobra(command ...string) carapace.Action {
-	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionCobra]")
-		}
+	return actionCommand(command...)(func(command ...string) carapace.Action {
+		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+			args := []string{"__complete"}
+			args = append(args, command[1:]...)
+			args = append(args, c.Args...)
+			args = append(args, c.Value)
+			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
+				lines := strings.Split(string(output), "\n")
+				if len(lines) == 0 {
+					return carapace.ActionMessage("unexpected command output")
+				}
 
-		args := []string{"__complete"}
-		args = append(args, command[1:]...)
-		args = append(args, c.Args...)
-		args = append(args, c.Value)
-		return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
-			lines := strings.Split(string(output), "\n")
-			if len(lines) == 0 {
-				return carapace.ActionMessage("unexpected command output")
-			}
+				// TODO experimental - directives not yet fully tested
+				var action carapace.Action
+				directive, err := readDirective(lines)
+				if err != nil {
+					return carapace.ActionValues()
+				}
 
-			// TODO experimental - directives not yet fully tested
-			var action carapace.Action
-			directive, err := readDirective(lines)
-			if err != nil {
-				return carapace.ActionValues()
-			}
+				if directive.matches(cobra.ShellCompDirectiveFilterDirs) {
+					return actionDirectories(lines)
+				} else if directive.matches(cobra.ShellCompDirectiveFilterFileExt) {
+					return actionFiles(lines)
+				} else {
+					action = actionValues(lines)
+				}
 
-			if directive.matches(cobra.ShellCompDirectiveFilterDirs) {
-				return actionDirectories(lines)
-			} else if directive.matches(cobra.ShellCompDirectiveFilterFileExt) {
-				return actionFiles(lines)
-			} else {
-				action = actionValues(lines)
-			}
+				if len(lines) < 3 && !directive.matches(cobra.ShellCompDirectiveNoFileComp) {
+					action = carapace.ActionFiles()
+				}
 
-			if len(lines) < 3 && !directive.matches(cobra.ShellCompDirectiveNoFileComp) {
-				action = carapace.ActionFiles()
-			}
+				if directive.matches(cobra.ShellCompDirectiveError) {
+					action = carapace.ActionValues()
+				}
 
-			if directive.matches(cobra.ShellCompDirectiveError) {
-				action = carapace.ActionValues()
-			}
-
-			if directive.matches(cobra.ShellCompDirectiveNoSpace) {
-				action = action.NoSpace()
-			}
-			return action
+				if directive.matches(cobra.ShellCompDirectiveNoSpace) {
+					action = action.NoSpace()
+				}
+				return action
+			})
 		})
 	})
 }

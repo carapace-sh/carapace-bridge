@@ -28,24 +28,22 @@ import (
 //		)
 //	}
 func ActionComplete(command ...string) carapace.Action {
-	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		if len(command) == 0 {
-			return carapace.ActionMessage("missing argument [ActionComplete]")
-		}
+	return actionCommand(command...)(func(command ...string) carapace.Action {
+		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+			c.Args = append(command[1:], c.Args...)
+			c.Setenv("COMP_LINE", fmt.Sprintf("%v %v %v", command[0], strings.Join(c.Args, " "), c.Value))
+			return carapace.ActionExecCommand(command[0])(func(output []byte) carapace.Action {
+				lines := strings.Split(string(output), "\n")
 
-		c.Args = append(command[1:], c.Args...)
-		c.Setenv("COMP_LINE", fmt.Sprintf("%v %v %v", command[0], strings.Join(c.Args, " "), c.Value))
-		return carapace.ActionExecCommand(command[0])(func(output []byte) carapace.Action {
-			lines := strings.Split(string(output), "\n")
-
-			a := carapace.ActionValues(lines[:len(lines)-1]...)
-			for _, line := range lines[:len(lines)-1] {
-				if len(line) > 0 && strings.ContainsAny(line[:len(line)-1], "/=@:.,") {
-					a = a.NoSpace()
-					break
+				a := carapace.ActionValues(lines[:len(lines)-1]...)
+				for _, line := range lines[:len(lines)-1] {
+					if len(line) > 0 && strings.ContainsAny(line[:len(line)-1], "/=@:.,") {
+						a = a.NoSpace()
+						break
+					}
 				}
-			}
-			return a
-		}).Invoke(c).ToA()
+				return a
+			}).Invoke(c).ToA()
+		})
 	})
 }
