@@ -3,7 +3,7 @@ module github.com/rsteube/carapace-bridge
 go 1.21
 
 require (
-	github.com/rsteube/carapace v0.50.0
+	github.com/rsteube/carapace v0.50.2
 	github.com/rsteube/carapace-shlex v0.1.2
 	github.com/spf13/cobra v1.8.0
 	gopkg.in/yaml.v3 v3.0.1
