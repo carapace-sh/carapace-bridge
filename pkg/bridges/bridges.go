@@ -1,7 +1,7 @@
 package bridges
 
 import (
-	"github.com/rsteube/carapace-bridge/pkg/env"
+	"github.com/carapace-sh/carapace-bridge/pkg/env"
 )
 
 func filter(m map[string]bool, filter ...[]string) map[string]bool {

@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	"github.com/rsteube/carapace/pkg/execlog"
+	"github.com/carapace-sh/carapace"
+	"github.com/carapace-sh/carapace/pkg/execlog"
 )
 
 func Zsh() []string {

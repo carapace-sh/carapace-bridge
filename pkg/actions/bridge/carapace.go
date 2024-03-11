@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/rsteube/carapace"
+	"github.com/carapace-sh/carapace"
 	"github.com/spf13/cobra"
 )
 
-// ActionCarapace bridges https://github.com/rsteube/carapace
+// ActionCarapace bridges https://github.com/carapace-sh/carapace
 func ActionCarapace(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {

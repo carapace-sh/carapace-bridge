@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/rsteube/carapace"
+	"github.com/carapace-sh/carapace"
 )
 
 // ActionYargs bridges https://github.com/yargs/yargs

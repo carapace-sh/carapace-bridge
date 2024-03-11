@@ -3,9 +3,9 @@ package bridge
 import (
 	"slices"
 
-	"github.com/rsteube/carapace"
-	"github.com/rsteube/carapace-bridge/pkg/bridges"
-	"github.com/rsteube/carapace-bridge/pkg/env"
+	"github.com/carapace-sh/carapace"
+	"github.com/carapace-sh/carapace-bridge/pkg/bridges"
+	"github.com/carapace-sh/carapace-bridge/pkg/env"
 )
 
 // Bridges bridges completions as defined in bridges.yaml and CARAPACE_BRIDGE environment variable
