@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rsteube/carapace"
+	"github.com/carapace-sh/carapace"
 )
 
 // ActionComplete bridges https://github.com/posener/complete

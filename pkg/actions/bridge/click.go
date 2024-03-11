@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	shlex "github.com/rsteube/carapace-shlex"
+	"github.com/carapace-sh/carapace"
+	shlex "github.com/carapace-sh/carapace-shlex"
 )
 
 // ActionClick bridges https://github.com/pallets/click

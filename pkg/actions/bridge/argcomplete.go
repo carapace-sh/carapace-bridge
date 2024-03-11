@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rsteube/carapace"
+	"github.com/carapace-sh/carapace"
 )
 
 // ActionArgcomplete bridges https://github.com/kislyuk/argcomplete

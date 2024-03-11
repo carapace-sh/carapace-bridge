@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	shlex "github.com/rsteube/carapace-shlex"
-	"github.com/rsteube/carapace/pkg/style"
+	"github.com/carapace-sh/carapace"
+	shlex "github.com/carapace-sh/carapace-shlex"
+	"github.com/carapace-sh/carapace/pkg/style"
 )
 
 // ActionInshellisense bridges https://github.com/microsoft/inshellisense

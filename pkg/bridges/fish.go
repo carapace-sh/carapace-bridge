@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/rsteube/carapace/pkg/execlog"
+	"github.com/carapace-sh/carapace/pkg/execlog"
 )
 
 func Fish() []string {

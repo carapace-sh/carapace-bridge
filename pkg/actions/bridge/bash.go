@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	shlex "github.com/rsteube/carapace-shlex"
-	"github.com/rsteube/carapace/pkg/style"
-	"github.com/rsteube/carapace/pkg/xdg"
+	"github.com/carapace-sh/carapace"
+	shlex "github.com/carapace-sh/carapace-shlex"
+	"github.com/carapace-sh/carapace/pkg/style"
+	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
 //go:embed bash.sh
@@ -53,7 +53,7 @@ func ActionBash(command ...string) carapace.Action {
 				vals := make([]string, 0)
 				for _, line := range lines[:len(lines)-1] {
 					if splitted := strings.SplitN(line, "(", 2); len(splitted) == 2 {
-						// assume results contain descriptions in the format `value (description)` (spf13/cobra, rsteube/carapace)
+						// assume results contain descriptions in the format `value (description)` (spf13/cobra, carapace-sh/carapace)
 						vals = append(vals,
 							strings.TrimSpace(splitted[0]),
 							strings.TrimSpace(strings.TrimSuffix(splitted[1], ")")),

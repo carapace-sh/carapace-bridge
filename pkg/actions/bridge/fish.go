@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	shlex "github.com/rsteube/carapace-shlex"
-	"github.com/rsteube/carapace/pkg/style"
-	"github.com/rsteube/carapace/pkg/xdg"
+	"github.com/carapace-sh/carapace"
+	shlex "github.com/carapace-sh/carapace-shlex"
+	"github.com/carapace-sh/carapace/pkg/style"
+	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
 // ActionFish bridges completions registered in fish

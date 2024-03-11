@@ -4,11 +4,11 @@ import (
 	_ "embed"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	"github.com/rsteube/carapace-bridge/third_party/github.com/Valodim/zsh-capture-completion"
-	"github.com/rsteube/carapace/pkg/style"
-	"github.com/rsteube/carapace/pkg/xdg"
-	"github.com/rsteube/carapace/third_party/github.com/acarl005/stripansi"
+	"github.com/carapace-sh/carapace"
+	"github.com/carapace-sh/carapace-bridge/third_party/github.com/Valodim/zsh-capture-completion"
+	"github.com/carapace-sh/carapace/pkg/style"
+	"github.com/carapace-sh/carapace/pkg/xdg"
+	"github.com/carapace-sh/carapace/third_party/github.com/acarl005/stripansi"
 )
 
 // ActionZsh bridges completions registered in zsh

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/rsteube/carapace-bridge/cmd/carapace-bridge/cmd"
+import "github.com/carapace-sh/carapace-bridge/cmd/carapace-bridge/cmd"
 
 var version = "develop"
 

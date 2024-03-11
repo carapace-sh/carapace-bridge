@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rsteube/carapace"
-	"github.com/rsteube/carapace-bridge/pkg/actions/bridge"
-	"github.com/rsteube/carapace/pkg/ps"
-	"github.com/rsteube/carapace/pkg/style"
+	"github.com/carapace-sh/carapace"
+	"github.com/carapace-sh/carapace-bridge/pkg/actions/bridge"
+	"github.com/carapace-sh/carapace/pkg/ps"
+	"github.com/carapace-sh/carapace/pkg/style"
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +41,7 @@ func init() {
 	addSubCommand("argcomplete", "bridges https://github.com/kislyuk/argcomplete", bridge.ActionArgcomplete)
 	addSubCommand("bash", "bridges completions registered in bash", bridge.ActionBash)
 	addSubCommand("carapace-bin", "bridges completions registered in carapace-bin", bridge.ActionCarapaceBin)
-	addSubCommand("carapace", "bridges https://github.com/rsteube/carapace", bridge.ActionCarapace)
+	addSubCommand("carapace", "bridges https://github.com/carapace-sh/carapace", bridge.ActionCarapace)
 	addSubCommand("clap", "bridges https://github.com/clap-rs/clap", bridge.ActionClap)
 	addSubCommand("click", "bridges https://github.com/pallets/click", bridge.ActionClick)
 	addSubCommand("cobra", "bridges https://github.com/spf13/cobra", bridge.ActionCobra)
@@ -49,7 +49,7 @@ func init() {
 	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
 	addSubCommand("inshellisense", "bridges https://github.com/microsoft/inshellisense", bridge.ActionInshellisense)
 	addSubCommand("kingpin", "bridges https://github.com/alecthomas/kingpin", bridge.ActionKingpin)
-	addSubCommand("macro", "bridges macros exposed with https://github.com/rsteube/carapace-spec", bridge.ActionMacro)
+	addSubCommand("macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec", bridge.ActionMacro)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
 	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecli)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)

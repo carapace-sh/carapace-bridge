@@ -1,6 +1,6 @@
 package bridges
 
-import "github.com/rsteube/carapace/pkg/execlog"
+import "github.com/carapace-sh/carapace/pkg/execlog"
 
 func Inshellisense() []string {
 	if _, err := execlog.LookPath("inshellisense"); err != nil {
