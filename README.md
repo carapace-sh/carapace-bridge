@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/carapace-sh/carapace-bridge/badge.svg?branch=master)](https://coveralls.io/github/carapace-sh/carapace-bridge?branch=master)
 [![Packaging status](https://repology.org/badge/tiny-repos/carapace-bridge.svg)](https://repology.org/project/carapace-bridge/versions)
 
-Invokes completion of various frameworks and provides bridge actions for [carapace-bin](https://github.com/rsteube/carapace-bin).
+Invokes completion of various frameworks and provides bridge actions for [carapace-bin](https://github.com/carapace-sh/carapace-bin).
 
 [![asciicast](https://asciinema.org/a/574303.svg)](https://asciinema.org/a/574303)
 
@@ -13,7 +13,7 @@ Supported inputs:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
 - [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/carapace-sh/carapace)
-- [carapace-bin](https://github.com/rsteube/carapace-bin/)
+- [carapace-bin](https://github.com/carapace-sh/carapace-bin/)
 - [clap](https://github.com/clap-rs/clap)
 - [click](https://github.com/pallets/click)
 - [cobra](https://github.com/spf13/cobra)
