@@ -33,7 +33,7 @@ brews:
   -
     name: carapace-bridge
     description: "completion bridge"
-    homepage: "https://github.com/rsteube/carapace-bridge"
+    homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     tap:
       owner: rsteube
@@ -42,7 +42,7 @@ brews:
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
 scoop:
   description: "completion bridge"
-  homepage: "https://github.com/rsteube/carapace-bridge"
+  homepage: "https://github.com/carapace-sh/carapace-bridge"
   license: "MIT"
   bucket:
     owner: rsteube
@@ -52,7 +52,7 @@ scoop:
 aurs:
   -
     description: "completion bridge"
-    homepage: "https://github.com/rsteube/carapace-bridge"
+    homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     maintainers:
       - rsteube <rsteube@users.noreply.github.com>
@@ -62,7 +62,7 @@ aurs:
 nfpms:
   -
     description: "completion bridge"
-    homepage: "https://github.com/rsteube/carapace-bridge"
+    homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     maintainer: rsteube <rsteube@users.noreply.github.com>
     formats:

@@ -76,7 +76,7 @@ func actionCommand(command ...string) func(f func(command ...string) carapace.Ac
 	}
 }
 
-// ActionCarapace bridges macros exposed with https://github.com/rsteube/carapace-bin
+// ActionCarapace bridges macros exposed with https://github.com/carapace-sh/carapace-bin
 func ActionMacro(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
