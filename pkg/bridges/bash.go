@@ -67,7 +67,7 @@ func bashCompletionLocations() []string {
 		}
 	} else {
 		if dataHome, ok := os.LookupEnv("XDG_DATA_HOME"); ok {
-			locations = append(locations, fmt.Sprintf("%v/.local/share/bash-completion/completions", dataHome))
+			locations = append(locations, fmt.Sprintf("%v/bash-completion/completions", dataHome))
 		} else if home, err := os.UserHomeDir(); err == nil {
 			locations = append(locations, fmt.Sprintf("%v/.local/share/bash-completion/completions", home))
 		}
