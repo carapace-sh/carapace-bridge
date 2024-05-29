@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set +o history # turn off history
 
 COMP_WORDS=($COMP_LINE)
 if [ "${COMP_LINE: -1}" = " " ]; then
