@@ -1,7 +1,9 @@
 package bridge
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -53,18 +55,33 @@ func ActionArgcomplete(command ...string) carapace.Action {
 				current = "" // seems partial positional arguments aren't completed as well
 			}
 
+			tempDir := filepath.Join(os.TempDir(), "carapace-bridge")
+			if err := os.Mkdir(tempDir, os.ModePerm); err != nil && !os.IsExist(err) {
+				return carapace.ActionMessage(err.Error())
+			}
+			tempFile, err := os.CreateTemp(tempDir, "argcomplete_")
+			if err != nil {
+				return carapace.ActionMessage(err.Error())
+			}
+			defer os.Remove(tempFile.Name())
+
 			compLine := command[0] + " " + strings.Join(append(args, current), " ") // TODO escape/quote special characters
 			c.Setenv("_ARGCOMPLETE", "1")
 			c.Setenv("_ARGCOMPLETE_DFS", "\t")
 			c.Setenv("_ARGCOMPLETE_IFS", "\n")
 			c.Setenv("_ARGCOMPLETE_SHELL", "fish")
+			c.Setenv("_ARGCOMPLETE_STDOUT_FILENAME", tempFile.Name())
 			c.Setenv("_ARGCOMPLETE_SUPPRESS_SPACE", "1") // TODO needed? relevant for nospace detection?
 			// c.Setenv("_ARGCOMPLETE_COMP_WORDBREAKS", " ") // TODO set to space-only for multiparts?
 			c.Setenv("_ARGCOMPLETE", "1")
 			c.Setenv("COMP_LINE", compLine)
 			c.Setenv("COMP_POINT", strconv.Itoa(len(compLine)))
 			nospace := false
-			a := carapace.ActionExecCommand("sh", "-c", command[0]+" 8>&1 9>&2 1>/dev/null 2>/dev/null")(func(output []byte) carapace.Action {
+			a := carapace.ActionExecCommand(command[0])(func(_ []byte) carapace.Action {
+				output, err := os.ReadFile(tempFile.Name())
+				if err != nil {
+					return carapace.ActionMessage(err.Error())
+				}
 				lines := strings.Split(string(output), "\n")
 				vals := make([]string, 0)
 				isFlag := strings.HasPrefix(c.Value, "-")
