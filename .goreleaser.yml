@@ -1,3 +1,4 @@
+version: 2
 before:
   hooks:
     - go mod download
@@ -35,20 +36,23 @@ brews:
     description: "completion bridge"
     homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
-    tap:
+    repository:
       owner: rsteube
       name: homebrew-tap
       token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-scoop:
-  description: "completion bridge"
-  homepage: "https://github.com/carapace-sh/carapace-bridge"
-  license: "MIT"
-  bucket:
-    owner: rsteube
-    name: scoop-bucket
-    token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
-  commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+
+scoops:
+  -
+    description: "completion bridge"
+    homepage: "https://github.com/carapace-sh/carapace-bridge"
+    license: "MIT"
+    repository:
+      owner: rsteube
+      name: scoop-bucket
+      token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
+    commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+
 aurs:
   -
     description: "completion bridge"
