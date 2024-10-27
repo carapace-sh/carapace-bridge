@@ -11,24 +11,11 @@ builds:
       - darwin
     main: ./cmd/carapace-bridge
     binary: carapace-bridge
-    tags:
-      - release
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     format_overrides:
       - goos: windows
         format: zip
-
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
 
 brews:
   -
