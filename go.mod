@@ -1,6 +1,6 @@
 module github.com/carapace-sh/carapace-bridge
 
-go 1.21
+go 1.23.1
 
 require (
 	github.com/carapace-sh/carapace v1.5.0
