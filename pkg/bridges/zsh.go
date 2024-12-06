@@ -1,6 +1,8 @@
 package bridges
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"runtime"
 	"sort"
@@ -8,6 +10,7 @@ import (
 
 	"github.com/carapace-sh/carapace"
 	"github.com/carapace-sh/carapace/pkg/execlog"
+	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
 func Zsh() []string {
@@ -20,11 +23,23 @@ func Zsh() []string {
 	}
 
 	return cache("zsh", func() ([]string, error) {
-		out, err := execlog.Command("zsh", "--no-rcs", "-c", "printf '%s\n' $fpath").Output()
-		if err != nil {
+		script := "printf '%s\n' $fpath"
+		if path, err := zshrc(); err == nil {
+			script = fmt.Sprintf("source %v;%v", path, script)
+		}
+
+		var stdout, stderr bytes.Buffer
+		cmd := execlog.Command("zsh", "--no-rcs", "-e", "-c", script)
+		cmd.Stdout = &stdout
+		cmd.Stderr = &stderr
+
+		if err := cmd.Run(); err != nil {
+			if stderr.Len() > 0 {
+				carapace.LOG.Println(stderr.String())
+			}
 			return nil, err
 		}
-		lines := strings.Split(string(out), "\n")
+		lines := strings.Split(stdout.String(), "\n")
 
 		unique := make(map[string]bool)
 		for _, line := range lines {
@@ -48,4 +63,16 @@ func Zsh() []string {
 
 		return completers, nil
 	})
+}
+
+func zshrc() (string, error) {
+	configDir, err := xdg.UserConfigDir()
+	if err != nil {
+		return "", err
+	}
+	path := configDir + "/carapace/bridge/zsh/.zshrc"
+	if _, err := os.Stat(path); err != nil {
+		return "", err
+	}
+	return path, nil
 }
