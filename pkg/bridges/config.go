@@ -28,5 +28,9 @@ func Config() map[string]string {
 		carapace.LOG.Println(err.Error())
 		return make(map[string]string)
 	}
+
+	if completers == nil {
+		return make(map[string]string)
+	}
 	return completers
 }
