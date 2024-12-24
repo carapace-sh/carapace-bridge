@@ -8,7 +8,7 @@ import (
 	"github.com/carapace-sh/carapace"
 )
 
-// Deprecated: Old version which uses fd 8/9, which aren't available on powershell/windows.
+// Deprecated: Old version which uses fd 8/9 (not available on powershell/windows).
 func ActionArgcompleteLegacy(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
