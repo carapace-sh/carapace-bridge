@@ -39,6 +39,7 @@ func init() {
 	carapace.Gen(rootCmd)
 	rootCmd.AddGroup(&cobra.Group{ID: "bridge", Title: "Bridge Commands"})
 	addSubCommand("argcomplete", "bridges https://github.com/kislyuk/argcomplete", bridge.ActionArgcomplete)
+	addSubCommand("argcomplete-legacy", "bridges https://github.com/kislyuk/argcomplete", bridge.ActionArgcompleteLegacy)
 	addSubCommand("bash", "bridges completions registered in bash", bridge.ActionBash)
 	addSubCommand("carapace-bin", "bridges completions registered in carapace-bin", bridge.ActionCarapaceBin)
 	addSubCommand("carapace", "bridges https://github.com/carapace-sh/carapace", bridge.ActionCarapace)
