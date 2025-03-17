@@ -22,10 +22,11 @@ setopt rcquotes
 PROMPT=
 
 # load completion system
+oldfpath=$fpath
 autoload -U compinit && compinit
 compinit -d "${CARAPACE_BRIDGE_CONFIG_HOME:-~/.config}/carapace/bridge/zsh/.zcompdump_capture"
 source      "${CARAPACE_BRIDGE_CONFIG_HOME:-~/.config}/carapace/bridge/zsh/.zshrc"
-compinit # second call to adopt any changes to fpath
+[[ $oldfpath != $fpath ]] && compinit # second call to adopt any changes to fpath
 
 
 # never run a command
