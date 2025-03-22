@@ -1,11 +1,14 @@
 package bridges
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/carapace-sh/carapace/pkg/execlog"
+	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
 func Fish() []string {
@@ -17,15 +20,21 @@ func Fish() []string {
 	}
 
 	return cache("fish", func() ([]string, error) {
+		configDir, err := xdg.UserConfigDir()
+		if err != nil {
+			return nil, err
+		}
+
+		configPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
+		snippet := fmt.Sprintf(`source "$__fish_data_dir/config.fish";source %#v;echo $fish_complete_path`, configPath)
+
+		output, err := execlog.Command("fish", "--no-config", "--command", snippet).Output()
+		if err != nil {
+			return nil, err
+		}
+
 		unique := make(map[string]bool)
-		for _, location := range []string{
-			"/data/data/com.termux/files/usr/share/fish/completions",          // termux
-			"/data/data/com.termux/files/usr/share/fish/vendor_completions.d", // termux
-			"/usr/local/share/fish/completions",                               // osx
-			"/usr/local/share/fish/vendor_completions.d",                      // osx
-			"/usr/share/fish/completions",                                     // linux
-			"/usr/share/fish/vendor_completions.d",                            // linux
-		} {
+		for _, location := range strings.Split(string(output), " ") {
 			entries, err := os.ReadDir(location)
 			if err != nil {
 				continue
