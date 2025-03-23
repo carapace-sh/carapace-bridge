@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/carapace-sh/carapace"
@@ -23,7 +24,7 @@ func ActionFish(command ...string) carapace.Action {
 			args := append(command, c.Args...)
 			args = append(args, c.Value)
 
-			configPath := fmt.Sprintf("%v/carapace/bridge/fish/config.fish", configDir)
+			configPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
 			if err := ensureExists(configPath); err != nil {
 				return carapace.ActionMessage(err.Error())
 			}
