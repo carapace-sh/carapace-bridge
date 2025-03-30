@@ -6,4 +6,5 @@ var inshellisenseBuiltins = []string{
 	"echo",
 	"rm",
 	"rmdir",
+	"source",
 }
