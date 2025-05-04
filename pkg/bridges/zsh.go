@@ -25,7 +25,7 @@ func Zsh() []string {
 	return cache("zsh", func() ([]string, error) {
 		script := "printf '%s\n' $fpath"
 		if path, err := zshrc(); err == nil {
-			script = fmt.Sprintf("autoload -U compinit && compinit;source %v;%v;compinit", path, script)
+			script = fmt.Sprintf("autoload -U compinit && compinit;source %#v;%v;compinit", path, script)
 		}
 
 		var stdout, stderr bytes.Buffer
