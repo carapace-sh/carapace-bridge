@@ -26,7 +26,7 @@ func Fish() []string {
 		}
 
 		configPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
-		snippet := fmt.Sprintf(`source "$__fish_data_dir/config.fish";source %#v;echo $fish_complete_path`, configPath)
+		snippet := fmt.Sprintf(`set __fish_config_dir "/var/empty";source "$__fish_data_dir/config.fish";source %#v;echo $fish_complete_path`, configPath)
 
 		output, err := execlog.Command("fish", "--no-config", "--command", snippet).Output()
 		if err != nil {
