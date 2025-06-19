@@ -1,0 +1,8 @@
+services:
+  complete:
+    build:
+      context: complete
+    image: ghcr.io/carapace-sh/carapace-bridge:complete
+    hostname: carapace-bridge:complete_terraform
+    volumes:
+      - '..:/carapace-bridge:ro'

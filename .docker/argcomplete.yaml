@@ -1,0 +1,8 @@
+services:
+  argcomplete:
+    build:
+      context: argcomplete
+    image: ghcr.io/carapace-sh/carapace-bridge:argcomplete
+    hostname: carapace-bridge:argcomplete_az
+    volumes:
+      - '..:/carapace-bridge:ro'

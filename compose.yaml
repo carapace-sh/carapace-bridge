@@ -1,0 +1,8 @@
+include:
+  - ./.docker/argcomplete.yaml
+  - ./.docker/click.yaml
+  - ./.docker/cobra.yaml
+  - ./.docker/complete.yaml
+  - ./.docker/kingpin.yaml
+  - ./.docker/urfavecli.yaml
+  - ./.docker/yargs.yaml

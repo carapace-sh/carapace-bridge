@@ -1,0 +1,8 @@
+services:
+  click:
+    build:
+      context: click
+    image: ghcr.io/carapace-sh/carapace-bridge:click
+    hostname: carapace-bridge:click_watson
+    volumes:
+      - '..:/carapace-bridge:ro'
