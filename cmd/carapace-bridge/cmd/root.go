@@ -35,6 +35,7 @@ func Execute(version string) error {
 	rootCmd.Version = version
 	return rootCmd.Execute()
 }
+
 func init() {
 	carapace.Gen(rootCmd)
 	rootCmd.AddGroup(&cobra.Group{ID: "bridge", Title: "Bridge Commands"})
@@ -52,7 +53,8 @@ func init() {
 	addSubCommand("kingpin", "bridges https://github.com/alecthomas/kingpin", bridge.ActionKingpin)
 	addSubCommand("macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec", bridge.ActionMacro)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
-	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecli)
+	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli (v2)", bridge.ActionUrfavecli)
+	addSubCommand("urfavecli@v1", "bridges https://github.com/urfave/cli (v3)", bridge.ActionUrfavecliV1)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
 	addSubCommand("zsh", "bridges completions registered in zsh", bridge.ActionZsh)
 }

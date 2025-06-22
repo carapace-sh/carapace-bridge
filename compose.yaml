@@ -5,4 +5,5 @@ include:
   - ./.docker/complete.yaml
   - ./.docker/kingpin.yaml
   - ./.docker/urfavecli.yaml
+  - ./.docker/urfavecliV1.yaml
   - ./.docker/yargs.yaml

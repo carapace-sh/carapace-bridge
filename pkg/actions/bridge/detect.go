@@ -21,6 +21,7 @@ var candidates = []string{
 	"complete",
 	"kingpin",
 	"urfavecli",
+	"urfavecli@v1",
 
 	// python
 	"argcomplete",

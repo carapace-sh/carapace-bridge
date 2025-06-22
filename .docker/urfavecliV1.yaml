@@ -1,0 +1,8 @@
+services:
+  urfavecliV1:
+    build:
+      context: urfavecliV1
+    image: ghcr.io/carapace-sh/carapace-bridge:urfavecliV1
+    hostname: carapace-bridge:urfavecliV1_tea
+    volumes:
+      - '..:/carapace-bridge:ro'
