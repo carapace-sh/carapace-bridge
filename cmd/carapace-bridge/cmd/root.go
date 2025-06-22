@@ -54,7 +54,7 @@ func init() {
 	addSubCommand("macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec", bridge.ActionMacro)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
 	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli (v2)", bridge.ActionUrfavecli)
-	addSubCommand("urfavecliv3", "bridges https://github.com/urfave/cli (v3)", bridge.ActionUrfavecliV3)
+	addSubCommand("urfavecli@v1", "bridges https://github.com/urfave/cli (v3)", bridge.ActionUrfavecliV1)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)
 	addSubCommand("zsh", "bridges completions registered in zsh", bridge.ActionZsh)
 }
