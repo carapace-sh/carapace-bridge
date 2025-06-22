@@ -1,0 +1,8 @@
+services:
+  yargs:
+    build:
+      context: yargs
+    image: ghcr.io/carapace-sh/carapace-bridge:yargs
+    hostname: carapace-bridge:yargs_ng
+    volumes:
+      - '..:/carapace-bridge:ro'

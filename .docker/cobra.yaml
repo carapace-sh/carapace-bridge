@@ -1,0 +1,8 @@
+services:
+  cobra:
+    build:
+      context: cobra
+    image: ghcr.io/carapace-sh/carapace-bridge:cobra
+    hostname: carapace-bridge:cobra_gh
+    volumes:
+      - '..:/carapace-bridge:ro'

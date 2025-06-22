@@ -1,0 +1,8 @@
+services:
+  kingpin:
+    build:
+      context: kingpin
+    image: ghcr.io/carapace-sh/carapace-bridge:kingpin
+    hostname: carapace-bridge:kingpin_tsh
+    volumes:
+      - '..:/carapace-bridge:ro'

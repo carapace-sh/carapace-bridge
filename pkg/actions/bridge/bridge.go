@@ -8,43 +8,33 @@ import (
 	"github.com/carapace-sh/carapace-bridge/pkg/env"
 )
 
+var bridgeActions = map[string]func(command ...string) carapace.Action{
+	"argcomplete":    ActionArgcomplete,
+	"argcomplete@v1": ActionArgcompleteV1,
+	"bash":           ActionBash,
+	"carapace":       ActionCarapace,
+	"clap":           ActionClap,
+	"click":          ActionClick,
+	"cobra":          ActionCobra,
+	"complete":       ActionComplete,
+	"fish":           ActionFish,
+	"inshellisense":  ActionInshellisense,
+	"kingpin":        ActionKingpin,
+	"powershell":     ActionPowershell,
+	"urfavecli":      ActionUrfavecli,
+	"yargs":          ActionYargs,
+	"zsh":            ActionZsh,
+}
+
 // Bridges bridges completions as defined in bridges.yaml and CARAPACE_BRIDGE environment variable
 func ActionBridges(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 			if bridge, ok := bridges.Config()[command[0]]; ok {
-				switch bridge {
-				case "argcomplete":
-					return ActionArgcomplete(command...)
-				case "bash":
-					return ActionBash(command...)
-				case "carapace":
-					return ActionCarapace(command...)
-				case "clap":
-					return ActionClap(command...)
-				case "click":
-					return ActionClick(command...)
-				case "cobra":
-					return ActionCobra(command...)
-				case "complete":
-					return ActionComplete(command...)
-				case "fish":
-					return ActionFish(command...)
-				case "inshellisense":
-					return ActionInshellisense(command...)
-				case "kingpin":
-					return ActionKingpin(command...)
-				case "powershell":
-					return ActionPowershell(command...)
-				case "urfavecli":
-					return ActionUrfavecli(command...)
-				case "yargs":
-					return ActionYargs(command...)
-				case "zsh":
-					return ActionZsh(command...)
-				default:
-					return carapace.ActionMessage("unknown bridge: %v", bridge)
+				if action, ok := bridgeActions[bridge]; ok {
+					return action(command...)
 				}
+				return carapace.ActionMessage("unknown bridge: %v", bridge)
 			}
 
 			for _, b := range env.Bridges() {
