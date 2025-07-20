@@ -20,6 +20,7 @@ var bridgeActions = map[string]func(command ...string) carapace.Action{
 	"fish":           ActionFish,
 	"inshellisense":  ActionInshellisense,
 	"kingpin":        ActionKingpin,
+	"kitten":         ActionKitten,
 	"powershell":     ActionPowershell,
 	"urfavecli":      ActionUrfavecli,
 	"urfavecli@v1":   ActionUrfavecliV1,
