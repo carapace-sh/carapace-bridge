@@ -2,6 +2,7 @@ package bridges
 
 import (
 	"bytes"
+	_ "embed"
 	"fmt"
 	"os"
 	"runtime"
@@ -13,6 +14,9 @@ import (
 	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
+//go:embed zsh.sh
+var zshScript string
+
 func Zsh() []string {
 	if runtime.GOOS == "windows" {
 		return []string{}
@@ -23,7 +27,7 @@ func Zsh() []string {
 	}
 
 	return cache("zsh", func() ([]string, error) {
-		script := "printf '%s\n' $fpath"
+		script := zshScript
 		if path, err := zshrc(); err == nil {
 			script = fmt.Sprintf("autoload -U compinit && compinit;source %#v;%v;compinit", path, script)
 		}
@@ -39,19 +43,12 @@ func Zsh() []string {
 			}
 			return nil, err
 		}
-		lines := strings.Split(stdout.String(), "\n")
 
+		lines := strings.Split(stdout.String(), "\n")
 		unique := make(map[string]bool)
 		for _, line := range lines {
-			entries, err := os.ReadDir(line)
-			if err != nil {
-				carapace.LOG.Println(err.Error())
-				continue
-			}
-			for _, entry := range entries {
-				if !entry.IsDir() && strings.HasPrefix(entry.Name(), "_") {
-					unique[strings.TrimPrefix(entry.Name(), "_")] = true
-				}
+			if line != "" {
+				unique[line] = true
 			}
 		}
 
