@@ -1,6 +1,10 @@
 package bridges
 
-import "github.com/carapace-sh/carapace/pkg/execlog"
+import (
+	"encoding/json"
+
+	"github.com/carapace-sh/carapace/pkg/execlog"
+)
 
 func Inshellisense() []string {
 	if _, err := execlog.LookPath("inshellisense"); err != nil {
@@ -8,17 +12,15 @@ func Inshellisense() []string {
 	}
 
 	return cache("inshellisense", func() ([]string, error) {
-		// out, err := execlog.Command("inshellisense", "list").Output()
-		// if err != nil {
-		// 	return []string{}
-		// }
+		out, err := execlog.Command("inshellisense", "specs", "list").Output()
+		if err != nil {
+			return nil, err
+		}
 
-		// var entries []string
-		// if err := json.Unmarshal(out, &entries); err != nil {
-		// 	return []string{}
-		// }
-		// TODO hardcoded for now (https://github.com/microsoft/inshellisense/pull/154)
-		entries := inshellisenseCompleters
+		var entries []string
+		if err := json.Unmarshal(out, &entries); err != nil {
+			return nil, err
+		}
 
 		unique := make(map[string]bool)
 		for _, entry := range entries {

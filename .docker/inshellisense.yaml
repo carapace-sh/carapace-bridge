@@ -1,0 +1,8 @@
+services:
+  inshellisense:
+    build:
+      context: inshellisense
+    image: ghcr.io/carapace-sh/carapace-bridge:inshellisense
+    hostname: carapace-bridge:inshellisense
+    volumes:
+      - '..:/carapace-bridge:ro'
