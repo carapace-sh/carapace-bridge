@@ -17,10 +17,10 @@ func Bridges() map[string]string {
 	m := Config()
 	for _, bridge := range env.Bridges() {
 		if f, ok := map[string]func() []string{
-			"bash":         Bash,
-			"fish":         Fish,
-			"inshellisens": Inshellisense,
-			"zsh":          Zsh,
+			"bash":          Bash,
+			"fish":          Fish,
+			"inshellisense": Inshellisense,
+			"zsh":           Zsh,
 		}[bridge]; ok {
 			for _, name := range f() {
 				if _, ok := m[name]; !ok {
