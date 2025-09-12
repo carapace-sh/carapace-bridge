@@ -40,7 +40,7 @@ archives:
 brews:
   -
     name: carapace-bridge
-    description: "completion bridge"
+    description: "A multi-shell completion bridge"
     homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     repository:
@@ -51,7 +51,7 @@ brews:
 
 scoops:
   -
-    description: "completion bridge"
+    description: "A multi-shell completion bridge"
     homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     repository:
@@ -62,7 +62,7 @@ scoops:
 
 aurs:
   -
-    description: "completion bridge"
+    description: "A multi-shell completion bridge"
     homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     maintainers:
@@ -72,7 +72,7 @@ aurs:
 
 nfpms:
   -
-    description: "completion bridge"
+    description: "A multi-shell completion bridge"
     homepage: "https://github.com/carapace-sh/carapace-bridge"
     license: "MIT"
     maintainer: rsteube <rsteube@users.noreply.github.com>
