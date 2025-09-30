@@ -22,7 +22,14 @@ func actionUrfavecliV3(command ...string) carapace.Action {
 				if len(lines) <= 1 {
 					return carapace.ActionFiles()
 				}
-				return carapace.ActionValues(lines[:len(lines)-1]...).NoSpace([]rune("/=@:.,")...)
+				vals := make([]string, 0)
+				for _, line := range lines {
+					if line != "" {
+						name, description, _ := strings.Cut(line, ":")
+						vals = append(vals, name, description)
+					}
+				}
+				return carapace.ActionValuesDescribed(vals...).NoSpace([]rune("/=@:.,")...)
 			})
 		})
 	})
