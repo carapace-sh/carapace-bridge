@@ -11,11 +11,11 @@ jobs:
     container: ghcr.io/carapace-sh/go:1.23.1
     steps:
     - name: shallow clone
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       if: "!startsWith(github.ref, 'refs/tags/')"
 
     - name: deep clone
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       if: startsWith(github.ref, 'refs/tags/')
       with:
         fetch-depth: 0
