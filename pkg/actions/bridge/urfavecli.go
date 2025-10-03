@@ -17,6 +17,7 @@ func actionUrfavecliV3(command ...string) carapace.Action {
 			args := append(command[1:], c.Args...)
 			args = append(args, c.Value)
 			args = append(args, "--generate-shell-completion")
+			c.Setenv("SHELL", "zsh")
 			return carapace.ActionExecCommand(command[0], args...)(func(output []byte) carapace.Action {
 				lines := strings.Split(string(output), "\n")
 				if len(lines) <= 1 {
@@ -30,7 +31,7 @@ func actionUrfavecliV3(command ...string) carapace.Action {
 					}
 				}
 				return carapace.ActionValuesDescribed(vals...).NoSpace([]rune("/=@:.,")...)
-			})
+			}).Invoke(c).ToA()
 		})
 	})
 }
