@@ -11,6 +11,7 @@ Invokes completion of various frameworks and provides bridge actions for [carapa
 
 Supported inputs:
 - [argcomplete](https://github.com/kislyuk/argcomplete)
+- [aws](https://github.com/aws/aws-cli)
 - [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/carapace-sh/carapace)
 - [carapace-bin](https://github.com/carapace-sh/carapace-bin/)
