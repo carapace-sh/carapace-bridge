@@ -2,6 +2,7 @@ package bridges
 
 // print -roC1 -- ${(k)builtins}
 var zshBuiltins = []string{
+	"&&",
 	"-",
 	".",
 	":",
@@ -109,6 +110,7 @@ var zshBuiltins = []string{
 	"whence",
 	"where",
 	"which",
+	"+X",
 	"zcompile",
 	"zformat",
 	"zle",
