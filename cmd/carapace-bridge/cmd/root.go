@@ -50,6 +50,7 @@ func init() {
 	addSubCommand("cobra", "bridges https://github.com/spf13/cobra", bridge.ActionCobra)
 	addSubCommand("complete", "bridges https://github.com/posener/complete", bridge.ActionComplete)
 	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
+	addSubCommand("gcloud", "bridges https://docs.cloud.google.com/sdk/gcloud", bridge.ActionGcloud)
 	addSubCommand("inshellisense", "bridges https://github.com/microsoft/inshellisense", bridge.ActionInshellisense)
 	addSubCommand("kingpin", "bridges https://github.com/alecthomas/kingpin", bridge.ActionKingpin)
 	addSubCommand("kitten", "bridges https://github.com/kovidgoyal/kitty", bridge.ActionKitten)

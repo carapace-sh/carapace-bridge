@@ -20,6 +20,7 @@ Supported inputs:
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
 - [fish](https://fishshell.com/)
+- [gcloud](https://docs.cloud.google.com/sdk/gcloud)
 - [inshellisense](https://github.com/microsoft/inshellisense)
 - [kingpin](https://github.com/alecthomas/kingpin)
 - [kitten](https://github.com/kovidgoyal/kitty)
