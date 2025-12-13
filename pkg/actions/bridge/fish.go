@@ -12,7 +12,8 @@ import (
 )
 
 // ActionFish bridges completions registered in fish
-// (uses custom `config.fish` in “~/.config/carapace/bridge/fish`)
+//
+//	(uses custom `config.fish` in `~/.config/carapace/bridge/fish`)
 func ActionFish(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
