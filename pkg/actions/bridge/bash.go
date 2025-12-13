@@ -16,7 +16,8 @@ import (
 var bashSnippet string
 
 // ActionBash bridges completions registered in bash
-// (uses custom `.bashrc` in “~/.config/carapace/bridge/bash`)
+//
+//	(uses custom `.bashrc` in `~/.config/carapace/bridge/bash`)
 func ActionBash(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {

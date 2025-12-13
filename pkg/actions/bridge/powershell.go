@@ -25,7 +25,8 @@ func ensureExists(path string) (err error) {
 }
 
 // ActionPowershell bridges completions registered in powershell
-// (uses custom `Microsoft.PowerShell_profile.ps1` in “~/.config/carapace/bridge/powershell`)
+//
+//	(uses custom `Microsoft.PowerShell_profile.ps1` in `~/.config/carapace/bridge/powershell`)
 func ActionPowershell(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
