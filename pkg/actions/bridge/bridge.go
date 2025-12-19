@@ -11,13 +11,16 @@ import (
 var bridgeActions = map[string]func(command ...string) carapace.Action{
 	"argcomplete":    ActionArgcomplete,
 	"argcomplete@v1": ActionArgcompleteV1,
+	"aws":            ActionAws,
 	"bash":           ActionBash,
 	"carapace":       ActionCarapace,
+	"carapace-bin":   ActionCarapaceBin,
 	"clap":           ActionClap,
 	"click":          ActionClick,
 	"cobra":          ActionCobra,
 	"complete":       ActionComplete,
 	"fish":           ActionFish,
+	"gcloud":         ActionGcloud,
 	"inshellisense":  ActionInshellisense,
 	"kingpin":        ActionKingpin,
 	"kitten":         ActionKitten,
@@ -26,6 +29,12 @@ var bridgeActions = map[string]func(command ...string) carapace.Action{
 	"urfavecli@v1":   ActionUrfavecliV1,
 	"yargs":          ActionYargs,
 	"zsh":            ActionZsh,
+}
+
+// TODO experimental
+func Get(name string) (func(command ...string) carapace.Action, bool) {
+	a, ok := bridgeActions[name]
+	return a, ok
 }
 
 // Bridges bridges completions as defined in bridges.yaml and CARAPACE_BRIDGE environment variable
