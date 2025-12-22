@@ -75,7 +75,7 @@ func Set(c Choice) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return err
 	}
-	return os.WriteFile(path, []byte(c.Format()), 0644)
+	return os.WriteFile(path, []byte(c.Format()+"\n"), 0644)
 }
 
 func Unset(name string) error {
