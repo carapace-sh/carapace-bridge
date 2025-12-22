@@ -14,7 +14,7 @@ func filter(m map[string]bool, filter ...[]string) map[string]bool {
 }
 
 func Bridges() map[string]string {
-	m := Config()
+	m := make(map[string]string) // TODO include choices??
 	for _, bridge := range env.Bridges() {
 		if f, ok := map[string]func() []string{
 			"bash":          Bash,

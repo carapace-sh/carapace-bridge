@@ -15,7 +15,7 @@ Supported inputs:
 - [bash](https://www.gnu.org/software/bash/)
 - [carapace](https://github.com/carapace-sh/carapace)
 - [carapace-bin](https://github.com/carapace-sh/carapace-bin/)
-- [clap](https://github.com/clap-rs/clap)
+- [clap](https://github.com/clap-rs/clap) ([experimental](https://github.com/clap-rs/clap/issues/3166))
 - [click](https://github.com/pallets/click)
 - [cobra](https://github.com/spf13/cobra)
 - [complete](https://github.com/posener/complete)
