@@ -5,9 +5,11 @@ import (
 
 	"github.com/carapace-sh/carapace"
 	"github.com/carapace-sh/carapace-bridge/pkg/bridges"
+	"github.com/carapace-sh/carapace-bridge/pkg/choice"
 	"github.com/carapace-sh/carapace-bridge/pkg/env"
 )
 
+// TODO @ is now incompatible with variants and needs a new name
 var bridgeActions = map[string]func(command ...string) carapace.Action{
 	"argcomplete":    ActionArgcomplete,
 	"argcomplete@v1": ActionArgcompleteV1,
@@ -37,15 +39,16 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 	return a, ok
 }
 
-// Bridges bridges completions as defined in bridges.yaml and CARAPACE_BRIDGE environment variable
+// Bridges bridges completions as defined by choices and CARAPACE_BRIDGE environment variable
+// TODO this should probably rather complete the available bridges? add ActionBridge (singular) or similar for this?
 func ActionBridges(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-			if bridge, ok := bridges.Config()[command[0]]; ok {
-				if action, ok := bridgeActions[bridge]; ok {
+			if choice, err := choice.Get(command[0]); err == nil && choice.Group == "bridge" {
+				if action, ok := bridgeActions[choice.Variant]; ok {
 					return action(command...)
 				}
-				return carapace.ActionMessage("unknown bridge: %v", bridge)
+				return carapace.ActionMessage("unknown bridge/variant: %v", choice.Variant)
 			}
 
 			for _, b := range env.Bridges() {
