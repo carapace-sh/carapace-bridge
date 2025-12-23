@@ -65,6 +65,10 @@ func Set(c Choice) error {
 		return errors.New("invalid name")
 	}
 
+	if c.Variant == "" || c.Group == "" {
+		return errors.New("not fully qualified choice") // TODO force fully qualified for now (instead of git@bridge)
+	}
+
 	configDir, err := xdg.UserConfigDir()
 	if err != nil {
 		return err
