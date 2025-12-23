@@ -99,7 +99,7 @@ func Unset(name string) error {
 	return nil
 }
 
-func List() ([]string, error) {
+func List(full bool) ([]*Choice, error) {
 	configDir, err := xdg.UserConfigDir()
 	if err != nil {
 		return nil, err
@@ -111,9 +111,18 @@ func List() ([]string, error) {
 		return nil, err
 	}
 
-	choices := make([]string, 0)
+	choices := make([]*Choice, 0)
 	for _, entry := range entries {
-		choices = append(choices, entry.Name())
+		switch full {
+		case true:
+			choice, err := Get(entry.Name())
+			if err != nil {
+				return nil, err
+			}
+			choices = append(choices, choice)
+		default:
+			choices = append(choices, &Choice{Name: entry.Name()})
+		}
 	}
 	return choices, nil
 }
