@@ -115,6 +115,7 @@ func List(full bool) ([]*Choice, error) {
 	for _, entry := range entries {
 		switch full {
 		case true:
+			// TODO slow
 			choice, err := Get(entry.Name())
 			if err != nil {
 				return nil, err
