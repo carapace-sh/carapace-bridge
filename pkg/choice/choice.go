@@ -17,8 +17,14 @@ type Choice struct {
 }
 
 func (c Choice) Format() string {
-	nameVariant := strings.Join([]string{c.Name, c.Variant}, "/")
-	return strings.Join([]string{nameVariant, c.Group}, "@")
+	s := c.Name
+	if c.Variant != "" {
+		s += "/" + c.Variant
+	}
+	if c.Group != "" {
+		s += "@" + c.Group
+	}
+	return s
 }
 
 func Parse(s string) Choice {
