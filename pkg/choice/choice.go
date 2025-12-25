@@ -3,6 +3,7 @@ package choice
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -68,11 +69,11 @@ func Get(name string) (*Choice, error) {
 
 func Set(c Choice) error {
 	if c.Name == "" || strings.Contains(c.Name, "/") {
-		return errors.New("invalid name")
+		return fmt.Errorf("invalid name: %q", c.Format())
 	}
 
 	if c.Group == "" {
-		return errors.New("not fully qualified variant")
+		return fmt.Errorf("missing group: %q", c.Format())
 	}
 
 	configDir, err := xdg.UserConfigDir()
