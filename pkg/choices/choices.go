@@ -11,33 +11,6 @@ import (
 	"github.com/carapace-sh/carapace/pkg/xdg"
 )
 
-type Choice struct {
-	Name    string
-	Variant string
-	Group   string
-}
-
-func (c Choice) Format() string {
-	s := c.Name
-	if c.Variant != "" {
-		s += "/" + c.Variant
-	}
-	if c.Group != "" {
-		s += "@" + c.Group
-	}
-	return s
-}
-
-func Parse(s string) Choice {
-	nameVariant, group, _ := strings.Cut(s, "@")
-	cName, variant, _ := strings.Cut(nameVariant, "/")
-	return Choice{
-		Name:    cName,
-		Variant: variant,
-		Group:   group,
-	}
-}
-
 func Get(name string) (*Choice, error) {
 	if name == "" || strings.Contains(name, "/") {
 		return nil, errors.New("invalid name")
