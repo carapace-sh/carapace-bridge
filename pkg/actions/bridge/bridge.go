@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"maps"
 	"slices"
 
 	"github.com/carapace-sh/carapace"
@@ -11,26 +12,26 @@ import (
 
 // TODO @ is now incompatible with variants and needs a new name
 var bridgeActions = map[string]func(command ...string) carapace.Action{
-	"argcomplete":    ActionArgcomplete,
-	"argcomplete@v1": ActionArgcompleteV1,
-	"aws":            ActionAws,
-	"bash":           ActionBash,
-	"carapace":       ActionCarapace,
-	"carapace-bin":   ActionCarapaceBin,
-	"clap":           ActionClap,
-	"click":          ActionClick,
-	"cobra":          ActionCobra,
-	"complete":       ActionComplete,
-	"fish":           ActionFish,
-	"gcloud":         ActionGcloud,
-	"inshellisense":  ActionInshellisense,
-	"kingpin":        ActionKingpin,
-	"kitten":         ActionKitten,
-	"powershell":     ActionPowershell,
-	"urfavecli":      ActionUrfavecli,
-	"urfavecli@v1":   ActionUrfavecliV1,
-	"yargs":          ActionYargs,
-	"zsh":            ActionZsh,
+	"argcomplete":   ActionArgcomplete,
+	"argcompleteV1": ActionArgcompleteV1,
+	"aws":           ActionAws,
+	"bash":          ActionBash,
+	"carapace":      ActionCarapace,
+	"carapace-bin":  ActionCarapaceBin,
+	"clap":          ActionClap,
+	"click":         ActionClick,
+	"cobra":         ActionCobra,
+	"complete":      ActionComplete,
+	"fish":          ActionFish,
+	"gcloud":        ActionGcloud,
+	"inshellisense": ActionInshellisense,
+	"kingpin":       ActionKingpin,
+	"kitten":        ActionKitten,
+	"powershell":    ActionPowershell,
+	"urfavecli":     ActionUrfavecli,
+	"urfavecliV1":   ActionUrfavecliV1,
+	"yargs":         ActionYargs,
+	"zsh":           ActionZsh,
 }
 
 // TODO experimental
@@ -39,9 +40,29 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 	return a, ok
 }
 
+func ActionBridges() carapace.Action {
+	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+		return carapace.ActionValues(slices.Collect(maps.Keys(bridgeActions))...).
+			Tag("bridges")
+	})
+}
+
+func ActionChoices() carapace.Action {
+	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
+		choices, err := choice.List(true)
+		if err != nil {
+			return carapace.ActionMessage(err.Error())
+		}
+		vals := make([]string, 0)
+		for _, choice := range choices {
+			vals = append(vals, choice.Name, choice.Format())
+		}
+		return carapace.ActionValues(vals...)
+	})
+}
+
 // Bridges bridges completions as defined by choices and CARAPACE_BRIDGE environment variable
-// TODO this should probably rather complete the available bridges? add ActionBridge (singular) or similar for this?
-func ActionBridges(command ...string) carapace.Action {
+func ActionBridge(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 			if choice, err := choice.Get(command[0]); err == nil && choice.Group == "bridge" {

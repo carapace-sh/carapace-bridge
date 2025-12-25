@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/carapace-sh/carapace"
+	"github.com/carapace-sh/carapace-bridge/pkg/actions/bridge"
 	"github.com/carapace-sh/carapace-bridge/pkg/choice"
 	"github.com/spf13/cobra"
 )
@@ -39,11 +40,7 @@ func init() {
 	carapace.Gen(chooseCmd).PositionalAnyCompletion(
 		carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 			if chooseCmd.Flag("delete").Changed {
-				choices, err := choice.List()
-				if err != nil {
-					return carapace.ActionMessage(err.Error())
-				}
-				return carapace.ActionValues(choices...)
+				return bridge.ActionChoices()
 			}
 
 			return carapace.ActionMultiPartsN("/", 2, func(c carapace.Context) carapace.Action {
@@ -52,29 +49,7 @@ func init() {
 					return carapace.ActionExecutables().Suffix("/")
 				default:
 					// TODO highlight known bridges
-					// TODO rename and enable the `@` versioned bridges
-					return carapace.ActionValues(
-						"argcomplete",
-						// "argcomplete@v1",
-						"aws",
-						"bash",
-						"carapace",
-						"carapace-bin",
-						"clap",
-						"click",
-						"cobra",
-						"complete",
-						"fish",
-						"gcloud",
-						"inshellisense",
-						"kingpin",
-						"kitten",
-						"powershell",
-						"urfavecli",
-						// "urfavecli@v1",
-						"yargs",
-						"zsh",
-					).Suffix("@bridge")
+					return bridge.ActionBridges().Suffix("@bridge")
 				}
 			})
 		}),
