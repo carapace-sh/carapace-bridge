@@ -6,7 +6,7 @@ import (
 
 	"github.com/carapace-sh/carapace"
 	"github.com/carapace-sh/carapace-bridge/pkg/bridges"
-	"github.com/carapace-sh/carapace-bridge/pkg/choice"
+	"github.com/carapace-sh/carapace-bridge/pkg/choices"
 	"github.com/carapace-sh/carapace-bridge/pkg/env"
 )
 
@@ -51,7 +51,7 @@ func ActionBridges() carapace.Action {
 func ActionBridge(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-			if choice, err := choice.Get(command[0]); err == nil && choice.Group == "bridge" {
+			if choice, err := choices.Get(command[0]); err == nil && choice.Group == "bridge" {
 				if action, ok := bridgeActions[choice.Variant]; ok {
 					return action(command...)
 				}

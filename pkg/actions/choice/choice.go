@@ -2,17 +2,17 @@ package choice
 
 import (
 	"github.com/carapace-sh/carapace"
-	"github.com/carapace-sh/carapace-bridge/pkg/choice"
+	"github.com/carapace-sh/carapace-bridge/pkg/choices"
 )
 
 func ActionChoices() carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		choices, err := choice.List(true)
+		list, err := choices.List(true)
 		if err != nil {
 			return carapace.ActionMessage(err.Error())
 		}
 		vals := make([]string, 0)
-		for _, choice := range choices {
+		for _, choice := range list {
 			vals = append(vals, choice.Name, choice.Format())
 		}
 		return carapace.ActionValues(vals...)
