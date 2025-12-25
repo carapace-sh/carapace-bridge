@@ -11,7 +11,6 @@ import (
 	"github.com/carapace-sh/carapace/third_party/golang.org/x/sys/execabs"
 )
 
-// TODO @ is now incompatible with variants and needs a new name
 var bridgeActions = map[string]func(command ...string) carapace.Action{
 	"argcomplete":   ActionArgcomplete,
 	"argcompleteV1": ActionArgcompleteV1,
@@ -106,7 +105,6 @@ func ActionBridges(name string) carapace.Action {
 					if slices.Contains(bridges.Zsh(), name) {
 						return style.Carapace.KeywordPositive
 					}
-				default:
 				}
 				return style.Default
 			}),
