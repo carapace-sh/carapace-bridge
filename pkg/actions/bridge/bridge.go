@@ -1,7 +1,6 @@
 package bridge
 
 import (
-	"maps"
 	"slices"
 
 	"github.com/carapace-sh/carapace"
@@ -46,8 +45,29 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 //	cobra
 func ActionBridges() carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		return carapace.ActionValues(slices.Collect(maps.Keys(bridgeActions))...).
-			Tag("bridges")
+		return carapace.ActionValuesDescribed(
+			"argcomplete", "bridges https://github.com/kislyuk/argcomplete",
+			"argcompleteV1", "bridges https://github.com/kislyuk/argcomplete",
+			"aws", "bridges https://github.com/aws/aws-cli",
+			"bash", "bridges completions registered in bash",
+			"carapace-bin", "bridges completions registered in carapace-bin",
+			"carapace", "bridges https://github.com/carapace-sh/carapace",
+			"clap", "bridges https://github.com/clap-rs/clap",
+			"click", "bridges https://github.com/pallets/click",
+			"cobra", "bridges https://github.com/spf13/cobra",
+			"complete", "bridges https://github.com/posener/complete",
+			"fish", "bridges completions registered in fish",
+			"gcloud", "bridges https://docs.cloud.google.com/sdk/gcloud",
+			"inshellisense", "bridges https://github.com/microsoft/inshellisense",
+			"kingpin", "bridges https://github.com/alecthomas/kingpin",
+			"kitten", "bridges https://github.com/kovidgoyal/kitty",
+			"macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec",
+			"powershell", "bridges completions registered in powershell",
+			"urfavecli", "bridges https://github.com/urfave/cli (v2)",
+			"urfavecliV1", "bridges https://github.com/urfave/cli (v3)",
+			"yargs", "bridges https://github.com/yargs/yargs",
+			"zsh", "bridges completions registered in zsh",
+		).Tag("bridges")
 	})
 }
 
