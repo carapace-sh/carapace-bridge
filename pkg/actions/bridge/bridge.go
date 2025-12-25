@@ -7,6 +7,8 @@ import (
 	"github.com/carapace-sh/carapace-bridge/pkg/bridges"
 	"github.com/carapace-sh/carapace-bridge/pkg/choices"
 	"github.com/carapace-sh/carapace-bridge/pkg/env"
+	"github.com/carapace-sh/carapace/pkg/style"
+	"github.com/carapace-sh/carapace/third_party/golang.org/x/sys/execabs"
 )
 
 // TODO @ is now incompatible with variants and needs a new name
@@ -45,29 +47,50 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 //	cobra
 func ActionBridges() carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		return carapace.ActionValuesDescribed(
-			"argcomplete", "bridges https://github.com/kislyuk/argcomplete",
-			"argcompleteV1", "bridges https://github.com/kislyuk/argcomplete",
-			"aws", "bridges https://github.com/aws/aws-cli",
-			"bash", "bridges completions registered in bash",
-			"carapace-bin", "bridges completions registered in carapace-bin",
-			"carapace", "bridges https://github.com/carapace-sh/carapace",
-			"clap", "bridges https://github.com/clap-rs/clap",
-			"click", "bridges https://github.com/pallets/click",
-			"cobra", "bridges https://github.com/spf13/cobra",
-			"complete", "bridges https://github.com/posener/complete",
-			"fish", "bridges completions registered in fish",
-			"gcloud", "bridges https://docs.cloud.google.com/sdk/gcloud",
-			"inshellisense", "bridges https://github.com/microsoft/inshellisense",
-			"kingpin", "bridges https://github.com/alecthomas/kingpin",
-			"kitten", "bridges https://github.com/kovidgoyal/kitty",
-			"macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec",
-			"powershell", "bridges completions registered in powershell",
-			"urfavecli", "bridges https://github.com/urfave/cli (v2)",
-			"urfavecliV1", "bridges https://github.com/urfave/cli (v3)",
-			"yargs", "bridges https://github.com/yargs/yargs",
-			"zsh", "bridges completions registered in zsh",
-		).Tag("bridges")
+		return carapace.Batch(
+			carapace.ActionValuesDescribed(
+				"argcomplete", "bridges https://github.com/kislyuk/argcomplete",
+				"argcompleteV1", "bridges https://github.com/kislyuk/argcomplete",
+				"carapace", "bridges https://github.com/carapace-sh/carapace",
+				"clap", "bridges https://github.com/clap-rs/clap",
+				"click", "bridges https://github.com/pallets/click",
+				"cobra", "bridges https://github.com/spf13/cobra",
+				"complete", "bridges https://github.com/posener/complete",
+				"kingpin", "bridges https://github.com/alecthomas/kingpin",
+				"macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec",
+				"urfavecli", "bridges https://github.com/urfave/cli (v2)",
+				"urfavecliV1", "bridges https://github.com/urfave/cli (v3)",
+				"yargs", "bridges https://github.com/yargs/yargs",
+			).Style(style.Carapace.KeywordAmbiguous),
+			carapace.ActionValuesDescribed(
+				"aws", "bridges https://github.com/aws/aws-cli",
+				"bash", "bridges completions registered in bash",
+				"carapace-bin", "bridges completions registered in carapace-bin",
+				"fish", "bridges completions registered in fish",
+				"gcloud", "bridges https://docs.cloud.google.com/sdk/gcloud",
+				"inshellisense", "bridges https://github.com/microsoft/inshellisense",
+				"kitten", "bridges https://github.com/kovidgoyal/kitty",
+				"powershell", "bridges completions registered in powershell",
+				"zsh", "bridges completions registered in zsh",
+			).StyleF(func(s string, sc style.Context) string {
+				executable := map[string]string{
+					"aws":           "aws",
+					"bash":          "bash",
+					"carapace-bin":  "carapace",
+					"fish":          "fish",
+					"gcloud":        "gcloud",
+					"inshellisense": "inshellisense",
+					"kitten":        "kitten",
+					"powershell":    "pwsh",
+					"zsh":           "zsh",
+				}[s]
+
+				if _, err := execabs.LookPath(executable); err != nil {
+					return style.Carapace.KeywordNegative
+				}
+				return style.Carapace.KeywordPositive
+			}),
+		).ToA().Tag("bridges")
 	})
 }
 
