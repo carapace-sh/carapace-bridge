@@ -40,6 +40,10 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 	return a, ok
 }
 
+// ActionBridges completes available bridges.
+//
+//	complete
+//	cobra
 func ActionBridges() carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 		return carapace.ActionValues(slices.Collect(maps.Keys(bridgeActions))...).
@@ -47,7 +51,7 @@ func ActionBridges() carapace.Action {
 	})
 }
 
-// Bridges bridges completions as defined by choices and CARAPACE_BRIDGE environment variable
+// ActionBridge bridges completions as defined by choices and CARAPACE_BRIDGE environment variable
 func ActionBridge(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
