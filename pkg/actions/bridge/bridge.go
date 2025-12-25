@@ -47,20 +47,6 @@ func ActionBridges() carapace.Action {
 	})
 }
 
-func ActionChoices() carapace.Action {
-	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-		choices, err := choice.List(true)
-		if err != nil {
-			return carapace.ActionMessage(err.Error())
-		}
-		vals := make([]string, 0)
-		for _, choice := range choices {
-			vals = append(vals, choice.Name, choice.Format())
-		}
-		return carapace.ActionValues(vals...)
-	})
-}
-
 // Bridges bridges completions as defined by choices and CARAPACE_BRIDGE environment variable
 func ActionBridge(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {

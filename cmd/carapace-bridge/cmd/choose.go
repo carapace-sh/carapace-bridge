@@ -3,7 +3,8 @@ package cmd
 import (
 	"github.com/carapace-sh/carapace"
 	"github.com/carapace-sh/carapace-bridge/pkg/actions/bridge"
-	"github.com/carapace-sh/carapace-bridge/pkg/choice"
+	"github.com/carapace-sh/carapace-bridge/pkg/actions/choice"
+	"github.com/carapace-sh/carapace-bridge/pkg/choices"
 	"github.com/spf13/cobra"
 )
 
@@ -15,13 +16,13 @@ var chooseCmd = &cobra.Command{
 		switch cmd.Flag("delete").Changed {
 		case true:
 			for _, arg := range args {
-				if err := choice.Unset(arg); err != nil {
+				if err := choices.Unset(arg); err != nil {
 					return err
 				}
 			}
 		default:
 			for _, arg := range args {
-				if err := choice.Set(choice.Parse(arg)); err != nil {
+				if err := choices.Set(choices.Parse(arg)); err != nil {
 					return err
 				}
 			}
@@ -40,7 +41,7 @@ func init() {
 	carapace.Gen(chooseCmd).PositionalAnyCompletion(
 		carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 			if chooseCmd.Flag("delete").Changed {
-				return bridge.ActionChoices()
+				return choice.ActionChoices()
 			}
 
 			return carapace.ActionMultiPartsN("/", 2, func(c carapace.Context) carapace.Action {

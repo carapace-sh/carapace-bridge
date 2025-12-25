@@ -1,4 +1,4 @@
-package choice
+package choices
 
 import (
 	"bufio"
