@@ -45,7 +45,7 @@ func Get(name string) (func(command ...string) carapace.Action, bool) {
 //
 //	complete
 //	cobra
-func ActionBridges() carapace.Action {
+func ActionBridges(name string) carapace.Action {
 	return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
 		return carapace.Batch(
 			carapace.ActionValuesDescribed(
@@ -61,7 +61,7 @@ func ActionBridges() carapace.Action {
 				"urfavecli", "bridges https://github.com/urfave/cli (v2)",
 				"urfavecliV1", "bridges https://github.com/urfave/cli (v3)",
 				"yargs", "bridges https://github.com/yargs/yargs",
-			).Style(style.Carapace.KeywordAmbiguous),
+			).Style(style.Dim),
 			carapace.ActionValuesDescribed(
 				"aws", "bridges https://github.com/aws/aws-cli",
 				"bash", "bridges completions registered in bash",
@@ -88,7 +88,27 @@ func ActionBridges() carapace.Action {
 				if _, err := execabs.LookPath(executable); err != nil {
 					return style.Carapace.KeywordNegative
 				}
-				return style.Carapace.KeywordPositive
+
+				switch s {
+				case "bash":
+					if slices.Contains(bridges.Bash(), name) {
+						return style.Carapace.KeywordPositive
+					}
+				case "fish":
+					if slices.Contains(bridges.Fish(), name) {
+						return style.Carapace.KeywordPositive
+					}
+				case "inshellisense":
+					if slices.Contains(bridges.Inshellisense(), name) {
+						return style.Carapace.KeywordPositive
+					}
+				case "zsh":
+					if slices.Contains(bridges.Zsh(), name) {
+						return style.Carapace.KeywordPositive
+					}
+				default:
+				}
+				return style.Default
 			}),
 		).ToA().Tag("bridges")
 	})

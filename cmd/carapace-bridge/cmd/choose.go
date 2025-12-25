@@ -50,7 +50,7 @@ func init() {
 					return carapace.ActionExecutables().Suffix("/")
 				default:
 					// TODO highlight known bridges
-					return bridge.ActionBridges().Suffix("@bridge")
+					return bridge.ActionBridges("").Suffix("@bridge")
 				}
 			})
 		}),
