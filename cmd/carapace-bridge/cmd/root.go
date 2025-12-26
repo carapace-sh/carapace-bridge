@@ -43,6 +43,7 @@ func init() {
 	addSubCommand("argcompleteV1", "bridges https://github.com/kislyuk/argcomplete", bridge.ActionArgcompleteV1)
 	addSubCommand("aws", "bridges https://github.com/aws/aws-cli", bridge.ActionAws)
 	addSubCommand("bash", "bridges completions registered in bash", bridge.ActionBash)
+	addSubCommand("bridge", "", bridge.ActionBridge) // TODO description
 	addSubCommand("carapace-bin", "bridges completions registered in carapace-bin", bridge.ActionCarapaceBin)
 	addSubCommand("carapace", "bridges https://github.com/carapace-sh/carapace", bridge.ActionCarapace)
 	addSubCommand("clap", "bridges https://github.com/clap-rs/clap", bridge.ActionClap)

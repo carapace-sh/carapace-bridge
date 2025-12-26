@@ -116,7 +116,7 @@ func ActionBridges(name string) carapace.Action {
 func ActionBridge(command ...string) carapace.Action {
 	return actionCommand(command...)(func(command ...string) carapace.Action {
 		return carapace.ActionCallback(func(c carapace.Context) carapace.Action {
-			if choice, err := choices.Get(command[0]); err == nil && choice.Group == "bridge" {
+			if choice, err := choices.Get(command[0]); err == nil && (choice.Group == "" || choice.Group == "bridge") {
 				if action, ok := bridgeActions[choice.Variant]; ok {
 					return action(command...)
 				}
