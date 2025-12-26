@@ -21,11 +21,11 @@ var candidates = []string{
 	"complete",
 	"kingpin",
 	"urfavecli",
-	"urfavecli@v1",
+	"urfavecli_v1",
 
 	// python
 	"argcomplete",
-	"argcomplete@v1",
+	"argcomplete_v1",
 	"click",
 
 	// rust
