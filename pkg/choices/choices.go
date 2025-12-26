@@ -45,8 +45,8 @@ func Set(c Choice) error {
 		return fmt.Errorf("invalid name: %q", c.Format())
 	}
 
-	if c.Group == "" {
-		return fmt.Errorf("missing group: %q", c.Format())
+	if c.Variant == "" && c.Group == "" {
+		return fmt.Errorf("at least one of variant or group must be set: %q", c.Format())
 	}
 
 	configDir, err := xdg.UserConfigDir()
