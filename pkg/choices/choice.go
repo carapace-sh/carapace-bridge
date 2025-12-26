@@ -21,12 +21,11 @@ func (c Choice) Format() string {
 	return s
 }
 
-func (c *Choice) Match(s string) bool {
+func (c *Choice) Match(other Choice) bool {
 	if c == nil {
 		return false
 	}
 
-	other := Parse(s)
 	switch {
 	case c.Name != "" && c.Name != other.Name,
 		c.Variant != "" && c.Variant != other.Variant,
@@ -34,6 +33,13 @@ func (c *Choice) Match(s string) bool {
 		return false
 	}
 	return true
+}
+
+func (c *Choice) MatchS(s string) bool {
+	if c == nil {
+		return false
+	}
+	return c.Match(Parse(s))
 }
 
 func Parse(s string) Choice {
