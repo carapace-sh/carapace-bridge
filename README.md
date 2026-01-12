@@ -22,6 +22,7 @@ Supported inputs:
 - [fish](https://fishshell.com/)
 - [gcloud](https://docs.cloud.google.com/sdk/gcloud)
 - [inshellisense](https://github.com/microsoft/inshellisense)
+- [jj](https://www.jj-vcs.dev)
 - [kingpin](https://github.com/alecthomas/kingpin)
 - [kitten](https://github.com/kovidgoyal/kitty)
 - [powershell](https://microsoft.com/powershell)
