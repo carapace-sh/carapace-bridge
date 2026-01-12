@@ -53,6 +53,7 @@ func init() {
 	addSubCommand("fish", "bridges completions registered in fish", bridge.ActionFish)
 	addSubCommand("gcloud", "bridges https://docs.cloud.google.com/sdk/gcloud", bridge.ActionGcloud)
 	addSubCommand("inshellisense", "bridges https://github.com/microsoft/inshellisense", bridge.ActionInshellisense)
+	addSubCommand("jj", "bridges https://www.jj-vcs.dev", bridge.ActionJJ)
 	addSubCommand("kingpin", "bridges https://github.com/alecthomas/kingpin", bridge.ActionKingpin)
 	addSubCommand("kitten", "bridges https://github.com/kovidgoyal/kitty", bridge.ActionKitten)
 	addSubCommand("macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec", bridge.ActionMacro)
