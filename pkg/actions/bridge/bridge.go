@@ -106,7 +106,7 @@ func ActionBridges(name string) carapace.Action {
 						return style.Carapace.KeywordPositive
 					}
 				}
-				return style.Default
+				return style.Dim
 			}),
 		).ToA().Tag("bridges")
 	})
