@@ -25,12 +25,12 @@ func ActionFish(command ...string) carapace.Action {
 			args := append(command, c.Args...)
 			args = append(args, c.Value)
 
-			configPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
-			if err := ensureExists(configPath); err != nil {
+			fishConfigDir := filepath.Join(configDir, "carapace/bridge/fish")
+			if err := ensureExists(fishConfigDir + "/config.fish"); err != nil {
 				return carapace.ActionMessage(err.Error())
 			}
 
-			snippet := fmt.Sprintf(`set __fish_config_dir "/var/empty";source "$__fish_data_dir/config.fish";source %#v;complete --do-complete="%v"`, configPath, shlex.Join(args)) // TODO needs custom escaping
+			snippet := fmt.Sprintf(`set __fish_config_dir %[1]q;source "$__fish_data_dir/config.fish";source %[1]q/config.fish;complete --do-complete=%[2]q`, fishConfigDir, shlex.Join(args)) // TODO needs custom escaping
 			return carapace.ActionExecCommand("fish", "--no-config", "--command", snippet)(func(output []byte) carapace.Action {
 				lines := strings.Split(string(output), "\n")
 

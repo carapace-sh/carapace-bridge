@@ -25,8 +25,9 @@ func Fish() []string {
 			return nil, err
 		}
 
-		configPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
-		snippet := fmt.Sprintf(`set __fish_config_dir "/var/empty";source "$__fish_data_dir/config.fish";source %#v;echo $fish_complete_path`, configPath)
+		fishConfigPath := filepath.Join(configDir, "carapace/bridge/fish/config.fish")
+		// TODO explicitly adding $__fish_data_dir/completions which is currently missing in $fish_complete_path
+		snippet := fmt.Sprintf(`set __fish_config_dir %[1]q;source "$__fish_data_dir/config.fish";source %[1]q/config.fish;echo $fish_complete_path $__fish_data_dir/completions`, fishConfigPath)
 
 		output, err := execlog.Command("fish", "--no-config", "--command", snippet).Output()
 		if err != nil {
@@ -34,7 +35,7 @@ func Fish() []string {
 		}
 
 		unique := make(map[string]bool)
-		for _, location := range strings.Split(string(output), " ") {
+		for location := range strings.SplitSeq(string(output), " ") {
 			entries, err := os.ReadDir(location)
 			if err != nil {
 				continue
