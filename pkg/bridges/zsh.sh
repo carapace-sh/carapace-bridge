@@ -1,5 +1,5 @@
 printf '%s\n' $fpath \
-| xargs -I{} find {} -name '_*' 2>/dev/null \
+| xargs -I{} find -L {} -name '_*' 2>/dev/null \
 | xargs head -n1 2>/dev/null \
 | grep -v -F \
        -e '==>' \
