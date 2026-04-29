@@ -47,8 +47,10 @@ func Zsh() []string {
 		lines := strings.Split(stdout.String(), "\n")
 		unique := make(map[string]bool)
 		for _, line := range lines {
-			if line != "" {
-				unique[line] = true
+			for _, name := range expandZshCompdef(line) {
+				if name != "" {
+					unique[name] = true
+				}
 			}
 		}
 
@@ -72,4 +74,66 @@ func zshrc() (string, error) {
 		return "", err
 	}
 	return path, nil
+}
+
+func expandZshCompdef(s string) []string {
+	s = strings.TrimSpace(s)
+	if s == "" || strings.HasPrefix(s, "_") || strings.HasPrefix(s, "-") || strings.Contains(s, "=") {
+		return nil
+	}
+
+	if strings.HasPrefix(s, "(") {
+		if end := strings.Index(s, ")"); end > 0 {
+			var expanded []string
+			for _, alternative := range strings.Split(s[1:end], "|") {
+				for _, prefix := range expandCharClasses(alternative) {
+					expanded = append(expanded, trimZshPattern(prefix+s[end+1:]))
+				}
+			}
+			return filterNames(expanded)
+		}
+	}
+
+	return filterNames([]string{trimZshPattern(s)})
+}
+
+func expandCharClasses(s string) []string {
+	start := strings.Index(s, "[")
+	if start == -1 {
+		return []string{s}
+	}
+	end := strings.Index(s[start:], "]")
+	if end == -1 {
+		return []string{s}
+	}
+	end += start
+
+	var expanded []string
+	for _, r := range s[start+1 : end] {
+		for _, suffix := range expandCharClasses(s[end+1:]) {
+			expanded = append(expanded, s[:start]+string(r)+suffix)
+		}
+	}
+	return expanded
+}
+
+func trimZshPattern(s string) string {
+	for i, r := range s {
+		switch r {
+		case '[', ']', '(', ')', '|', '*', '?', '#':
+			return s[:i]
+		}
+	}
+	return s
+}
+
+func filterNames(names []string) []string {
+	var filtered []string
+	for _, name := range names {
+		if name == "" || len(name) == 1 || strings.ContainsAny(name, "[]*?#()|") {
+			continue
+		}
+		filtered = append(filtered, name)
+	}
+	return filtered
 }
