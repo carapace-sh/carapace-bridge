@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/carapace-sh/carapace v1.11.4
 	github.com/carapace-sh/carapace-bridge v0.0.0-00010101000000-000000000000
-	github.com/carapace-sh/carapace-selfupdate v0.0.5
+	github.com/carapace-sh/carapace-selfupdate v0.0.10
 	github.com/spf13/cobra v1.10.2
 )
 
