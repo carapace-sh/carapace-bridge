@@ -26,11 +26,15 @@ func ActionFish(command ...string) carapace.Action {
 			args = append(args, c.Value)
 
 			fishConfigDir := filepath.Join(configDir, "carapace/bridge/fish")
-			if err := ensureExists(fishConfigDir + "/config.fish"); err != nil {
+			fishConfigFile := filepath.Join(fishConfigDir, "config.fish")
+			if err := ensureExists(fishConfigFile); err != nil {
 				return carapace.ActionMessage(err.Error())
 			}
 
-			snippet := fmt.Sprintf(`set __fish_config_dir %[1]q;source "$__fish_data_dir/config.fish";source %[1]q/config.fish;complete --do-complete=%[2]q`, fishConfigDir, shlex.Join(args)) // TODO needs custom escaping
+			fishCompletionDir := filepath.Join(configDir, "fish/completions")
+			completionName := filepath.Base(command[0])
+			completionFile := completionName + ".fish"
+			snippet := fmt.Sprintf(`set __fish_config_dir %[1]q;test -f "$__fish_data_dir/config.fish";and source "$__fish_data_dir/config.fish";source %[2]q;if test (complete -c %[3]q | count) -eq 0;for __carapace_fish_complete_dir in %[4]q $fish_complete_path $__fish_data_dir/completions;set -l __carapace_fish_complete_file $__carapace_fish_complete_dir/%[5]q;test -f "$__carapace_fish_complete_file";and source "$__carapace_fish_complete_file";and break;end;end;complete --do-complete=%[6]q`, fishConfigDir, fishConfigFile, completionName, fishCompletionDir, completionFile, shlex.Join(args)) // TODO needs custom escaping
 			return carapace.ActionExecCommand("fish", "--no-config", "--command", snippet)(func(output []byte) carapace.Action {
 				lines := strings.Split(string(output), "\n")
 
