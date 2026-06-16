@@ -22,8 +22,8 @@ func ActionAws(command ...string) carapace.Action {
 					return carapace.ActionValues()
 				}
 				for index, line := range lines {
-					if strings.HasSuffix(line, " ") {
-						lines[index] = strings.TrimSuffix(line, " ") // v1 has space suffix
+					if before, ok := strings.CutSuffix(line, " "); ok {
+						lines[index] = before // v1 has space suffix
 					}
 				}
 				a := carapace.ActionValues(lines[:len(lines)-1]...)
