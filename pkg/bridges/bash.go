@@ -99,7 +99,7 @@ func bashCompletionLocations() []string {
 	//     [[ $dir == ?*/@(bin|sbin) ]] &&
 	//         dirs+=("${dir%/*}/share/bash-completion/completions")
 	// done
-	for _, pathDir := range strings.Split(os.Getenv("$PATH"), string(os.PathListSeparator)) {
+	for _, pathDir := range strings.Split(os.Getenv("PATH"), string(os.PathListSeparator)) {
 		locations = append(locations, fmt.Sprintf("%v/share/bash-completion/completions", pathDir))
 	}
 
