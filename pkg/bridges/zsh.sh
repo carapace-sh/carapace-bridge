@@ -20,7 +20,7 @@ printf '%s\n' $fpath \
        -e '^#compdef$' \
 | while IFS= read -r compdef; do
        if [[ "$compdef" == *[\[\]\*\#\(\)\|]* ]]; then
-              print -rl -- ${(M)${(k)commands}:#${~compdef}}
+              (print -rl -- ${(M)${(k)commands}:#${~compdef}}) 2>/dev/null
        else
               print -r -- "$compdef"
        fi
