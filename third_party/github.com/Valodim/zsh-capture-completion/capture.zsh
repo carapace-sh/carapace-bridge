@@ -22,10 +22,10 @@ setopt rcquotes
 PROMPT=
 
 # load completion system
+# carapace-bridge: use dedicated dump path and source user .zshrc for fpath changes
 oldfpath="$fpath"
-autoload -U compinit && compinit
-compinit -d "${CARAPACE_BRIDGE_CONFIG_HOME:-$HOME/.config}/carapace/bridge/zsh/.zcompdump_capture"
-source      "${CARAPACE_BRIDGE_CONFIG_HOME:-$HOME/.config}/carapace/bridge/zsh/.zshrc"
+autoload -U compinit && compinit -d "${CARAPACE_BRIDGE_CONFIG_HOME:-$HOME/.config}/carapace/bridge/zsh/.zcompdump_capture"
+source "${CARAPACE_BRIDGE_CONFIG_HOME:-$HOME/.config}/carapace/bridge/zsh/.zshrc"
 [[ "$oldfpath" != "$fpath" ]] && compinit # second call to adopt any changes to fpath
 
 
@@ -138,4 +138,5 @@ while zpty -r z; do :; done | while IFS= read -r line; do
     (( tog )) && echo -E - $line
 done
 
-return 2
+# carapace-bridge: was `return 2` upstream, which always exited non-zero and broke ActionExecCommand
+return 0
