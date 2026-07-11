@@ -17,6 +17,7 @@ printf '%s\n' $fpath \
        -e '^_' \
        -e '^-' \
        -e '^.$' \
+       -e '^#compdef$' \
 | while IFS= read -r compdef; do
        if [[ "$compdef" == *[\[\]\*\#\(\)\|]* ]]; then
               print -rl -- ${(M)${(k)commands}:#${~compdef}}
