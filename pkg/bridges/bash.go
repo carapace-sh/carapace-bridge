@@ -81,7 +81,7 @@ func bashCompletionLocations() []string {
 	} else {
 		locations = append(locations,
 			"/data/data/com.termux/files/usr/share/bash-completion/completions", // termux
-			"/usr/local/share/bash-completion/completions",                      // osx
+			"/usr/local/share/bash-completion/completions",                      // osx (Intel)
 			"/usr/share/bash-completion/completions",                            // linux
 		)
 	}
@@ -90,8 +90,18 @@ func bashCompletionLocations() []string {
 	locations = append(locations,
 		"/data/data/com.termux/files/etc/bash_completion.d", // termux
 		"/etc/bash_completion.d",                            // linux
-		"/usr/local/etc/bash_completion.d",                  // osx
+		"/opt/homebrew/etc/bash_completion.d",               // osx (Apple Silicon)
+		"/usr/local/etc/bash_completion.d",                  // osx (Intel)
 	)
+
+	// 6) Homebrew prefix (covers both /usr/local and /opt/homebrew, or custom).
+	// `brew shellenv` sets HOMEBREW_PREFIX; use it when XDG_DATA_DIRS didn't already cover the share dir.
+	if prefix, ok := os.LookupEnv("HOMEBREW_PREFIX"); ok {
+		locations = append(locations,
+			fmt.Sprintf("%v/etc/bash_completion.d", prefix),
+			fmt.Sprintf("%v/share/bash-completion/completions", prefix),
+		)
+	}
 
 	return locations
 }
