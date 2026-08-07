@@ -3,7 +3,7 @@ module github.com/carapace-sh/carapace-bridge
 go 1.24
 
 require (
-	github.com/carapace-sh/carapace v1.14.0
+	github.com/carapace-sh/carapace v1.15.0
 	github.com/carapace-sh/carapace-shlex v1.1.1
 	github.com/spf13/cobra v1.10.2
 )
