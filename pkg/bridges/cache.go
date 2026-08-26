@@ -71,5 +71,9 @@ func save(path string, names []string) error {
 		return err
 	}
 
-	return os.WriteFile(path, m, os.ModePerm)
+	tmpPath := path + ".tmp"
+	if err := os.WriteFile(tmpPath, m, os.ModePerm); err != nil {
+		return err
+	}
+	return os.Rename(tmpPath, path)
 }
