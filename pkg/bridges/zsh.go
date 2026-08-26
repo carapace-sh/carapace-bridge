@@ -2,12 +2,14 @@ package bridges
 
 import (
 	"bytes"
+	"context"
 	_ "embed"
 	"fmt"
 	"os"
 	"runtime"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/carapace-sh/carapace"
 	"github.com/carapace-sh/carapace/pkg/execlog"
@@ -32,8 +34,11 @@ func Zsh() []string {
 			script = fmt.Sprintf("autoload -U compinit && compinit;source %#v;%v;compinit", path, script)
 		}
 
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
 		var stdout, stderr bytes.Buffer
-		cmd := execlog.Command("zsh", "--no-rcs", "-e", "-c", script)
+		cmd := execlog.CommandContext(ctx, "zsh", "--no-rcs", "-e", "-c", script)
 		cmd.Stdout = &stdout
 		cmd.Stderr = &stderr
 
