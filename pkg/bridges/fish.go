@@ -1,11 +1,13 @@
 package bridges
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/carapace-sh/carapace/pkg/execlog"
 	"github.com/carapace-sh/carapace/pkg/xdg"
@@ -29,7 +31,10 @@ func Fish() []string {
 		// TODO explicitly adding $__fish_data_dir/completions which is currently missing in $fish_complete_path
 		snippet := fmt.Sprintf(`set __fish_config_dir %[1]q;source "$__fish_data_dir/config.fish";source %[1]q/config.fish;echo $fish_complete_path $__fish_data_dir/completions`, fishConfigPath)
 
-		output, err := execlog.Command("fish", "--no-config", "--command", snippet).Output()
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		output, err := execlog.CommandContext(ctx, "fish", "--no-config", "--command", snippet).Output()
 		if err != nil {
 			return nil, err
 		}

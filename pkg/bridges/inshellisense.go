@@ -1,7 +1,9 @@
 package bridges
 
 import (
+	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/carapace-sh/carapace/pkg/execlog"
 )
@@ -12,7 +14,10 @@ func Inshellisense() []string {
 	}
 
 	return cache("inshellisense", func() ([]string, error) {
-		out, err := execlog.Command("inshellisense", "specs", "list").Output()
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		out, err := execlog.CommandContext(ctx, "inshellisense", "specs", "list").Output()
 		if err != nil {
 			return nil, err
 		}
