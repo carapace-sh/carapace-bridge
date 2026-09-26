@@ -5,6 +5,7 @@ include:
   - ./.docker/cobra.yaml
   - ./.docker/complete.yaml
   - ./.docker/kingpin.yaml
+  - ./.docker/typer.yaml
   - ./.docker/urfavecli.yaml
   - ./.docker/urfavecli_v1.yaml
   - ./.docker/yargs.yaml

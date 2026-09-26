@@ -58,6 +58,7 @@ func init() {
 	addSubCommand("kitten", "bridges https://github.com/kovidgoyal/kitty", bridge.ActionKitten)
 	addSubCommand("macro", "bridges macros exposed with https://github.com/carapace-sh/carapace-spec", bridge.ActionMacro)
 	addSubCommand("powershell", "bridges completions registered in powershell", bridge.ActionPowershell)
+	addSubCommand("typer", "bridges https://github.com/fastapi/typer", bridge.ActionTyper)
 	addSubCommand("urfavecli", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecli)
 	addSubCommand("urfavecli_v1", "bridges https://github.com/urfave/cli", bridge.ActionUrfavecliV1)
 	addSubCommand("yargs", "bridges https://github.com/yargs/yargs", bridge.ActionYargs)

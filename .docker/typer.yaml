@@ -1,0 +1,8 @@
+services:
+  typer:
+    build:
+      context: typer
+    image: ghcr.io/carapace-sh/carapace-bridge:typer
+    hostname: carapace-bridge:typer_demo
+    volumes:
+      - '..:/carapace-bridge:ro'

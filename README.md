@@ -26,6 +26,7 @@ Supported inputs:
 - [kingpin](https://github.com/alecthomas/kingpin)
 - [kitten](https://github.com/kovidgoyal/kitty)
 - [powershell](https://microsoft.com/powershell)
+- [typer](https://github.com/fastapi/typer)
 - [urfavecli](https://github.com/urfave/cli)
 - [yargs](https://github.com/yargs/yargs)
 - [zsh](https://www.zsh.org/)
