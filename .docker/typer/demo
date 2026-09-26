@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+import typer
+
+app = typer.Typer(help="Demo typer application")
+
+
+@app.command()
+def hello(name: str, formal: bool = False):
+    """Say hello."""
+    greeting = f"Good day, Ms. {name}." if formal else f"Hello {name}!"
+    print(greeting)
+
+
+@app.command()
+def create(
+    name: str,
+    kind: str = typer.Option("widget", help="Type of thing to create."),
+    force: bool = typer.Option(False, "--force", "-f", help="Overwrite if it exists."),
+):
+    """Create something."""
+    print(f"Creating {kind} {name} (force={force})")
+
+
+if __name__ == "__main__":
+    app()

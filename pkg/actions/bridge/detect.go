@@ -27,6 +27,7 @@ var candidates = []string{
 	"argcomplete",
 	"argcomplete_v1",
 	"click",
+	"typer",
 
 	// rust
 	// "clap", // TODO clap dynamic completion is still in development
