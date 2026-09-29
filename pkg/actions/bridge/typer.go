@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/carapace-sh/carapace"
-	shlex "github.com/carapace-sh/carapace-shlex"
+	shlex "github.com/carapace-sh/carapace-shlex/v2"
 )
 
 // ActionTyper bridges https://github.com/fastapi/typer
@@ -42,11 +42,11 @@ func ActionTyper(command ...string) carapace.Action {
 			// typer reads the full command line from _TYPER_COMPLETE_ARGS
 			// (shlex-style split) and treats the last word as incomplete
 			// unless it ends with a space (see typer/_completion_classes.py).
-			compLine := command[0] + " " + shlex.Join(args)
+			compLine := command[0] + " " + shlex.Join(args, shlex.Bash)
 			if current == "" {
 				compLine += " "
 			} else {
-				compLine += " " + shlex.Join([]string{current})
+				compLine += " " + shlex.Join([]string{current}, shlex.Bash)
 			}
 
 			autocompleteVar := fmt.Sprintf("_%v_COMPLETE", strings.ToUpper(strings.NewReplacer("-", "_", ".", "_").Replace(command[0])))
