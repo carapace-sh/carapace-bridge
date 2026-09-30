@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/carapace-sh/carapace"
-	shlex "github.com/carapace-sh/carapace-shlex"
+	shlex "github.com/carapace-sh/carapace-shlex/v2"
 	"github.com/carapace-sh/carapace/pkg/style"
 	"github.com/carapace-sh/carapace/pkg/xdg"
 )
@@ -34,7 +34,7 @@ func ActionBash(command ...string) carapace.Action {
 				return carapace.ActionMessage(err.Error())
 			}
 
-			joined := shlex.Join(args)
+			joined := shlex.Join(args, shlex.Bash)
 			if c.Value == "" {
 				joined = strings.TrimSuffix(joined, `""`)
 			}

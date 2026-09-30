@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/carapace-sh/carapace"
-	shlex "github.com/carapace-sh/carapace-shlex"
+	shlex "github.com/carapace-sh/carapace-shlex/v2"
 	"github.com/carapace-sh/carapace/pkg/style"
 )
 
@@ -16,7 +16,7 @@ func ActionInshellisense(command ...string) carapace.Action {
 			args := append(command, c.Args...)
 			args = append(args, c.Value)
 
-			input := shlex.Join(args)
+			input := shlex.Join(args, shlex.Bash)
 
 			if strings.HasSuffix(input, `""`) {
 				// TODO temporary fix as inshellisense can't handle quotes yet (won't work for those within)

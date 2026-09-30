@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/carapace-sh/carapace"
-	shlex "github.com/carapace-sh/carapace-shlex"
+	shlex "github.com/carapace-sh/carapace-shlex/v2"
 	"github.com/carapace-sh/carapace/pkg/style"
 	"github.com/carapace-sh/carapace/pkg/xdg"
 )
@@ -47,7 +47,7 @@ func ActionPowershell(command ...string) carapace.Action {
 			// args[index] = strings.Replace(arg, " ", "` ", -1)
 			// }
 
-			line := shlex.Join(args)
+			line := shlex.Join(args, shlex.Powershell)
 			snippet := []string{
 				fmt.Sprintf(`Get-Content "%v/carapace/bridge/powershell/Microsoft.PowerShell_profile.ps1" | Out-String | Invoke-Expression`, configDir),
 				fmt.Sprintf(`[System.Management.Automation.CommandCompletion]::CompleteInput("%v", %v, $null).CompletionMatches | ConvertTo-Json `, line, len(line)),
