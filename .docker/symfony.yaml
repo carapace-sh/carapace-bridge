@@ -1,0 +1,8 @@
+services:
+  symfony:
+    build:
+      context: symfony
+    image: ghcr.io/carapace-sh/carapace-bridge:symfony
+    hostname: carapace-bridge:symfony_demo
+    volumes:
+      - '..:/carapace-bridge:ro'

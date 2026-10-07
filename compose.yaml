@@ -1,10 +1,12 @@
 include:
   - ./.docker/argcomplete.yaml
   # TODO argcomplete_v1
+  - ./.docker/bpaf.yaml
   - ./.docker/click.yaml
   - ./.docker/cobra.yaml
   - ./.docker/complete.yaml
   - ./.docker/kingpin.yaml
+  - ./.docker/symfony.yaml
   - ./.docker/typer.yaml
   - ./.docker/urfavecli.yaml
   - ./.docker/urfavecli_v1.yaml

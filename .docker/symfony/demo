@@ -1,0 +1,50 @@
+#!/usr/bin/env php
+<?php
+
+require '/opt/demo/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+$hello = new class('hello') extends Command {
+    protected function configure(): void
+    {
+        $this->setDescription('Say hello')
+            ->addArgument('name', InputArgument::REQUIRED, 'Name of the person to greet')
+            ->addOption('formal', 'f', InputOption::VALUE_NONE, 'Be formal');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $name = $input->getArgument('name');
+        $greeting = $input->getOption('formal') ? "Good day, Ms. {$name}." : "Hello {$name}!";
+        $output->writeln($greeting);
+
+        return Command::SUCCESS;
+    }
+};
+
+$create = new class('create') extends Command {
+    protected function configure(): void
+    {
+        $this->setDescription('Create something')
+            ->addArgument('name', InputArgument::REQUIRED, 'Name of the thing')
+            ->addOption('kind', 'k', InputOption::VALUE_REQUIRED, 'Type of thing to create', 'widget');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $output->writeln(sprintf('Creating %s %s', $input->getOption('kind'), $input->getArgument('name')));
+
+        return Command::SUCCESS;
+    }
+};
+
+$application = new Application('demo', '1.0.0');
+$application->add($hello);
+$application->add($create);
+$application->run();
