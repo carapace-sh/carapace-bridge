@@ -1,7 +1,6 @@
 # carapace-bridge
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/carapace-sh/carapace-bridges)](https://pkg.go.dev/github.com/carapace-sh/carapace-bridge)
-[![GoReportCard](https://goreportcard.com/badge/github.com/carapace-sh/carapace-bridge)](https://goreportcard.com/report/github.com/carapace-sh/carapace-bridge)
 [![Coverage Status](https://coveralls.io/repos/github/carapace-sh/carapace-bridge/badge.svg?branch=master)](https://coveralls.io/github/carapace-sh/carapace-bridge?branch=master)
 [![Packaging status](https://repology.org/badge/tiny-repos/carapace-bridge.svg)](https://repology.org/project/carapace-bridge/versions)
 
