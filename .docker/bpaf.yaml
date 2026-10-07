@@ -1,0 +1,8 @@
+services:
+  bpaf:
+    build:
+      context: bpaf
+    image: ghcr.io/carapace-sh/carapace-bridge:bpaf
+    hostname: carapace-bridge:bpaf_demo
+    volumes:
+      - '..:/carapace-bridge:ro'

@@ -31,9 +31,13 @@ var candidates = []string{
 
 	// rust
 	// "clap", // TODO clap dynamic completion is still in development
+	"bpaf",
 
 	// javascript
 	"yargs",
+
+	// php
+	"symfony",
 }
 
 // TODO experimental
