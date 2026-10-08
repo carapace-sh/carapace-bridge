@@ -49,9 +49,9 @@ func ActionCobra(command ...string) carapace.Action {
 				}
 
 				if directive.matches(cobra.ShellCompDirectiveFilterDirs) {
-					return actionDirectories(lines)
+					action = actionDirectories(lines)
 				} else if directive.matches(cobra.ShellCompDirectiveFilterFileExt) {
-					return actionFiles(lines)
+					action = actionFiles(lines)
 				} else {
 					action = actionValues(lines)
 				}
@@ -66,6 +66,12 @@ func ActionCobra(command ...string) carapace.Action {
 
 				if directive.matches(cobra.ShellCompDirectiveNoSpace) {
 					action = action.NoSpace()
+				}
+
+				if prefix := attachedFlagPrefix(c.Value); prefix != "" {
+					// cobra returns bare values for flags with an attached value (`--flag=value`);
+					// re-attach the flag prefix so the values match the current word
+					action = action.Prefix(prefix)
 				}
 				return action
 			})
@@ -85,6 +91,16 @@ func readDirective(lines []string) (compDirective, error) {
 		return -1, err
 	}
 	return compDirective(value), nil
+}
+
+func attachedFlagPrefix(value string) string {
+	if !strings.HasPrefix(value, "-") {
+		return ""
+	}
+	if index := strings.Index(value, "="); index != -1 {
+		return value[:index+1]
+	}
+	return ""
 }
 
 func actionValues(lines []string) carapace.Action {
