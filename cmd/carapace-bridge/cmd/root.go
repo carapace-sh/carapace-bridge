@@ -145,7 +145,6 @@ func addSubCommand(use, short string, f func(s ...string) carapace.Action) {
 					"elvish", "#ffd6c9",
 					"export", style.Default,
 					"fish", "#7ea8fc",
-					"ion", "#0e5d6d",
 					"nushell", "#29d866",
 					"oil", "#373a36",
 					"powershell", "#e8a16f",
