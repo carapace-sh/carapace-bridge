@@ -1,6 +1,7 @@
 package bridge
 
 import (
+	"os/exec"
 	"slices"
 
 	"github.com/carapace-sh/carapace"
@@ -8,7 +9,6 @@ import (
 	"github.com/carapace-sh/carapace-bridge/pkg/choices"
 	"github.com/carapace-sh/carapace-bridge/pkg/env"
 	"github.com/carapace-sh/carapace/pkg/style"
-	"github.com/carapace-sh/carapace/third_party/golang.org/x/sys/execabs"
 )
 
 var bridgeActions = map[string]func(command ...string) carapace.Action{
@@ -93,7 +93,7 @@ func ActionBridges(name string) carapace.Action {
 					"zsh":           "zsh",
 				}[s]
 
-				if _, err := execabs.LookPath(executable); err != nil {
+				if _, err := exec.LookPath(executable); err != nil {
 					return style.Carapace.KeywordNegative
 				}
 
